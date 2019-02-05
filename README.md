@@ -1,19 +1,15 @@
 ##Viewer image analysis for SECAR program 
 
 #Packages needed:
-
-numpy,matplotlib, math
-
-If you're running on *fishtank* you might need to install with the --user option (pip install --user package):
-
-skimage (for io of images, feature detection, peak locating)
+numpy, matplotlib, math
+scikit-image (skimage for io of images, feature detection, peak locating)
 lmfit (for fitting beam profiles)
 scipy (signal package)
 
-#How to run
-
+#How to run:
+1. *ssh -X secaruser@flagtail* (code will not work with the python version on fishtank)
 1. Input paths to images and necesary details in INPUT.py
-2. Run with *python im_analysis.py*
+2. Run with *python3.5 im_analysis.py*
 
 #How it works
 
@@ -28,6 +24,7 @@ scipy (signal package)
 #Notes
 1. A Lorentzian and Voigt model can also be used, among other and any combination thereof. Skewed gaussian and double gaussians have so far describes most tunes best.
 2. The current models have an arbitrary inital guess that might need to be refined in certain cases. 
+3. If you're running on an account other than SECAR you might need to install with the --user option (pip install --user package) and run on the *flagtail* node that is running Debian Stretch OS and has python 3.5
 
 #To be done in the future:
 1. Better way of calculating offsets.
