@@ -2,6 +2,7 @@
 from INPUT import *
 from dot_detection import *
 from im_reduction import *
+import datetime
 import sys
 import numpy as np
 import matplotlib.pyplot as plt 
@@ -30,9 +31,10 @@ y_mid=models[y_profile_model](y_smooth,y)
 
 #### plot and save results ####
 fig = plt.figure(figsize=(6, 4))
+
 grid = plt.GridSpec(5, 5, hspace=0.3, wspace=0)
 main_ax = fig.add_subplot(grid[:-1, 1:])
-plt.text(260, 5, "Data Midpoint: X=%.1f, Y=%.1f, Scale: 5 mm is %.1f pixels" %(x_mid, y_mid, scale), size=9,
+plt.text(210, 5, "Data Midpoint: X=%.1f, Y=%.1f\n Scale: 1 mm is %.1f pixels" %(x_mid, y_mid, scale/5), size=12,
          ha="right", va="top",
          bbox=dict(boxstyle="round",
                    ec=(0, 0, 0.5),
@@ -45,6 +47,7 @@ x_hist = fig.add_subplot(grid[-1, 1:], sharex=main_ax)
 
 #Plot the reduced image in center 
 main_ax.imshow(image.subtracted_data)
+main_ax.set_title(sys.argv[1], fontsize=14)
 main_ax.plot([0, image.shape[1]], [y_mid,y_mid], linewidth=1, color='r')
 main_ax.plot( [x_mid, x_mid], [0, image.shape[0]], linewidth=1, color='r')
 #Plotting dots. Their location is relative to to selected region of the light_image
@@ -59,6 +62,9 @@ y_hist.plot([0, image.profile_y.max()], [y_mid, y_mid], linewidth=0.6, color='r'
 #y_hist.invert_yaxis()
 y_hist.invert_xaxis()
 
+#t= pd.to_datetime
+timestring = (datetime.datetime.now()).strftime("%m-%d_%H:%M")
+plt.savefig('ViewerCenter'+'_'+timestring+'.png')
 plt.show()
 #plt.savefig('results.png', dpi=100)
 
