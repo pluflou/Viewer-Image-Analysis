@@ -9,7 +9,7 @@ scipy (signal package)
 #How to run:
 1. *ssh -X secaruser@flagtail* (code will not work with the python version on fishtank)
 1. Input paths to images and necesary details in INPUT.py
-2. Run with *python3.5 im_analysis.py*
+2. Run with *python3.5 im_analysis.py path/to/tune.tiff*
 
 #How it works
 

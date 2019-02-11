@@ -3,14 +3,15 @@
 #Date: 2/3/2019
 
 from skimage import  io
+import sys
 
 #Enter here the images and the methods that will be used for the viewer analysis
 #Make sure to inlcude the path to the images
 
 ###### Image reduction ########
 #Enter here path and name of the tune image
-#raw_image= io.imread('tiff_files/071918_D1542_overnight_nominal__294.tiff')
-raw_image= io.imread('tiff_files/Tune115_07722018_viewer_D1542_001.tiff')
+raw_image= io.imread(sys.argv[1])
+#raw_image= io.imread('tiff_files/Tune115_07722018_viewer_D1542_001.tiff')
 
 #Enter here path and name of the background image (make sure it is the SAME SIZE as the tune image)
 #bg= io.imread('tiff_files/071918_D1542_overnight_nominal__295.tiff')
@@ -30,7 +31,7 @@ x_min= 250 #horizontal axis in image
 x_max= 350
 
 #Enter here path and name of the image of the viewer dots you wish to use as a template
-template= io.imread('tiff_files/dots/dot1.tiff')
+template= io.imread('tiff_files/dots/dot2.tiff') #dot2 seems good
 
 #Enter here the threshold (minimum intensity of peaks) to detect dots on image
 #Don't change this at the beginning. It is better to have a good search region first

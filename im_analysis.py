@@ -32,10 +32,10 @@ y_mid=models[y_profile_model](y_smooth,y)
 fig = plt.figure(figsize=(6, 4))
 grid = plt.GridSpec(5, 5, hspace=0.3, wspace=0)
 main_ax = fig.add_subplot(grid[:-1, 1:])
-plt.text(200, 5, "Data Midpoint: X=%.1f, Y=%.1f" %(x_mid, y_mid), size=9,
+plt.text(260, 5, "Data Midpoint: X=%.1f, Y=%.1f, Scale: 5 mm is %.1f pixels" %(x_mid, y_mid, scale), size=9,
          ha="right", va="top",
          bbox=dict(boxstyle="round",
-                   ec=(1., 0.5, 0.5),
+                   ec=(0, 0, 0.5),
                    fc=(1, 1, 1),
                    )
          )
