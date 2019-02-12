@@ -30,7 +30,7 @@ y_mid=models[y_profile_model](y_smooth,y)
 
 
 #### plot and save results ####
-fig = plt.figure(figsize=(6, 4))
+fig = plt.figure(figsize=(10, 7))
 
 grid = plt.GridSpec(5, 5, hspace=0.3, wspace=0)
 main_ax = fig.add_subplot(grid[:-1, 1:])
@@ -64,9 +64,9 @@ y_hist.invert_xaxis()
 
 #t= pd.to_datetime
 timestring = (datetime.datetime.now()).strftime("%m-%d_%H:%M")
-plt.savefig('ViewerCenter'+'_'+timestring+'.png')
+plt.savefig('ViewerCenter'+'_'+timestring+'.png', dpi=300)
 plt.show()
-#plt.savefig('results.png', dpi=100)
+ 
 
 
 

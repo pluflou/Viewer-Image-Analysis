@@ -56,9 +56,13 @@ try:
 except ValueError:
     print("Could not find dots on same y-axis")
 
-if ((len(dy)!=0 and len(dx)!=0) and (scale_y -1 <=scale_x and scale_x<= scale_y + 1)):
-    scale= scale_x
-    print("Adopted scale is ",scale," pixels for 5 mm.")
+if (len(dy)!=0 and len(dx)!=0):
+    if (scale_x<= scale_y):
+        scale= scale_x
+        print("Adopted scale is ",scale," pixels for 5 mm.")
+    elif (scale_y<= scale_x):
+        scale= scale_y
+        print("Adopted scale is ",scale," pixels for 5 mm.")
 elif (len(dy)!=0 and len(dx)==0):
     scale= scale_y
 elif (len(dx)!=0 and len(dy)==0):
@@ -87,6 +91,7 @@ ax3.set_title('Matching Results')
 ax3.autoscale(False)
 #ax3.plot(x, y, 'o', markeredgecolor='r', markerfacecolor='none', markersize=10)
 ax3.plot(  peaks[:,1], peaks[:,0], 'o', markeredgecolor='r', markerfacecolor='none', markersize=10)
+plt.show()
 
 
 
