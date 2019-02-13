@@ -51,23 +51,27 @@ class Image:
         self.offset_x=np.mean(self.profile_x[1:5])
         self.profile_x=self.profile_x[1:]-self.offset_x
 
-def findMid(profile):
+def findMedian(profile):
     sum_total=sum(profile)
+    median=0
+    sigp=0
+    sign=0
     for i in range(len(profile)):
         sumInt=sum(profile[0:i])
         frac=sumInt/sum_total
-        if (frac>0.49 and frac<0.51):
+        if (frac>0.15 and frac<0.17):
+            sign=i
+        elif (frac>0.49 and frac<0.51):
             #print("Case 1. Index: ", i)
             #print(i)
-            return i
+            median=i
         elif (frac>0.48 and frac<0.52):
-            #print("Case 2. Index: ", i)           
-            return i
-        elif (frac>0.46 and frac<0.54):
-            #print("Case 3. Index: ", i)    
-            return i
-        #else:
-         #   print("Middle is too far out.")
+            median=i
+        elif (frac>0.45 and frac<0.54):
+            median=i
+        elif (frac>0.83 and frac<0.85):
+            sigp=i
+    return  median, sigp, sign
 
 def skewedgauss_fit(profile, x):
     gauss = SkewedGaussianModel()
@@ -86,10 +90,10 @@ def skewedgauss_fit(profile, x):
     #fwhm=np.array(output.params['fwhm'])
     
     #find the mid point that separates two equal amounts of data
-    halfp= findMid(np.array(output.best_fit))
+    median, sigp, sign = findMedian(np.array(output.best_fit))
     #this mid point will be the 'effective center' of our beam spot
     #because this will make it easier to compare to the BCM data and it distributes the beam equally over the center
-    return halfp
+    return median, sigp, sign
 
 def gauss_fit(profile, x):
     gauss = GaussianModel()
@@ -98,8 +102,8 @@ def gauss_fit(profile, x):
 
     #to plot the fit uncomment the line below
     #fig, gridspec = output.plot(data_kws={'markersize': 1})
-    halfp= findMid(np.array(output.best_fit))
-    return halfp
+    median, sigp, sign = findMedian(np.array(output.best_fit))
+    return median, sigp, sign
 
 def doublegauss_fit(profile, x):
     gauss1 = GaussianModel(prefix='g1_') 
@@ -111,7 +115,7 @@ def doublegauss_fit(profile, x):
 
     mod= gauss1 + gauss2 
     output = mod.fit(profile, params_1, x=x)
-    halfp=findMid(np.array(output.best_fit))
+    median, sigp, sign =findMedian(np.array(output.best_fit))
 
     #to plot the fit uncomment the line below
     #fig, gridspec = output.plot(data_kws={'markersize': 1})
@@ -128,7 +132,7 @@ def doublegauss_fit(profile, x):
     #else:
      #   print("Fit is weird.")
 
-    return halfp
+    return median, sigp, sign
 
 
 def doubleSgauss_fit(profile, x):
@@ -141,7 +145,7 @@ def doubleSgauss_fit(profile, x):
     
     mod= gauss1 + gauss2 
     output = mod.fit(profile, params_1, x=x)
-    halfp=findMid(np.array(output.best_fit))
+    median, sigp, sign =findMedian(np.array(output.best_fit))
 
     #to plot the fit uncomment the line below
     #fig, gridspec = output.plot(data_kws={'markersize': 1})
@@ -156,6 +160,6 @@ def doubleSgauss_fit(profile, x):
     #else:
       #  print("Fit is weird.")
 
-    return halfp
+    return median, sigp, sign
 
 models= {'single_gaussian': gauss_fit , 'double_gaussian': doublegauss_fit , 'skewed_gaussian': skewedgauss_fit , 'gaussian_skewed_gaussian': doubleSgauss_fit }

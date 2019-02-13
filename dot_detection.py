@@ -20,7 +20,7 @@ while (flag):
         threshold +=0.05
         #print(peaks.shape)
     elif (peaks.shape[0]<=5):
-        print("Dots detected are at:\n", peaks)
+        print("Dots detected in ROI are at:\n", peaks)
         flag= False
         continue
     else:
@@ -91,7 +91,7 @@ ax3.set_title('Matching Results')
 ax3.autoscale(False)
 #ax3.plot(x, y, 'o', markeredgecolor='r', markerfacecolor='none', markersize=10)
 ax3.plot(  peaks[:,1], peaks[:,0], 'o', markeredgecolor='r', markerfacecolor='none', markersize=10)
-plt.show()
+#plt.show()
 
 
 
