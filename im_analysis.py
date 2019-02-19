@@ -49,7 +49,7 @@ x_hist = fig.add_subplot(grid[-1, 1:], sharex=main_ax)
 
 #Plot the reduced image in center 
 main_ax.imshow(image.subtracted_data)
-main_ax.set_title("Image: "+sys.argv[1]+ "\nScale: %.1f pixels is 1 mm\nData Median: X=%.1f, Y=%.1f, Viewer Center: Enter manually" %(scale/33, x_med, y_med), fontsize=12)
+main_ax.set_title("Image: "+sys.argv[1]+ "\nScale: %.1f mm is 1 pixel\nData Median: X=%.1f, Y=%.1f, Viewer Center: X=169, Y=164\nCenter X-pos: %.1f mm, Center Y-pos: %.1f mm" %(5/scale, x_med, y_med, abs(x_med-169)*(5/scale), abs(y_med-164)*(5/scale)), fontsize=12)
 main_ax.plot([0, image.shape[1]], [y_med,y_med], linewidth=1, color='r')
 main_ax.plot( [x_med, x_med], [0, image.shape[0]], linewidth=1, color='r')
 #Plotting dots. Their location is relative to to selected region of the light_image
@@ -58,22 +58,23 @@ print("Dots are at: \n X:", x_min+peaks[:,1]," Y: ", peaks[:,0]+y_min)
 # plot the x and y profiles
 x_hist.plot(x, image.profile_x)
 x_hist.plot([x_med,x_med],[0, image.profile_x.max()],  linewidth=0.6, color='r', marker='.')
-x_hist.plot([x_sigp,x_sigp],[0, image.profile_x.max()],  linewidth=0.6, color='r', linestyle='-')
-x_hist.plot([x_sign,x_sign],[0, image.profile_x.max()],  linewidth=0.6, color='r',  linestyle='-')
-x_hist.set_xlabel("Center Range between %.1f and %.1f pixels" %(x_sign, x_sigp), fontsize=11)
+#x_hist.plot([x_sigp,x_sigp],[0, image.profile_x.max()],  linewidth=0.6, color='r', linestyle='-')
+#x_hist.plot([x_sign,x_sign],[0, image.profile_x.max()],  linewidth=0.6, color='r',  linestyle='-')
+#x_hist.set_xlabel("Center X-pos. is at %.1f mm" %(abs(x_med-169)*(5/scale)), fontsize=11)
 
 y_hist.plot(image.profile_y, y)
 y_hist.plot([0, image.profile_y.max()], [y_med, y_med], linewidth=0.6, color='r', marker='.')
-y_hist.plot([0, image.profile_y.max()], [y_sign, y_sign], linewidth=0.6, color='r',  linestyle='-')
-y_hist.plot([0, image.profile_y.max()], [y_sigp, y_sigp], linewidth=0.6, color='r',  linestyle='-')
-y_hist.set_title("Center Range between\n%.1f and %.1f pixels" %(y_sign, y_sigp), fontsize=11)
+#y_hist.plot([0, image.profile_y.max()], [y_sign, y_sign], linewidth=0.6, color='r',  linestyle='-')
+#y_hist.plot([0, image.profile_y.max()], [y_sigp, y_sigp], linewidth=0.6, color='r',  linestyle='-')
+#y_hist.set_title("Center Range between\n%.1f and %.1f pixels" %(y_sign, y_sigp), fontsize=11)
 #y_hist.invert_yaxis()
+
 y_hist.invert_xaxis()
 
 #t= pd.to_datetime
-timestring = (datetime.datetime.now()).strftime("%m-%d_%H:%M")
+timestring = (datetime.datetime.now()).strftime("%m-%d_%H:%M.%f")
 plt.savefig('ViewerCenter'+'_'+timestring+'.png', dpi=300)
-plt.show()
+#plt.show()
  
 
 
