@@ -14,7 +14,7 @@ raw_image= io.imread(sys.argv[1])
 #raw_image= io.imread('tiff_files/Tune115_07722018_viewer_D1542_001.tiff')
 
 #Enter here path and name of the background image (make sure it is the SAME SIZE as the tune image)
-bg= io.imread('D1542_images/D1542_2_14_12_25_background_023.tiff')
+bg= io.imread('/user/secaruser/Documents/viewer_images/vd-d1542/2_21/D1542_2_21_18_20_bg_036.tiff')
 #bg= io.imread('/user/secaruser/Documents/viewer_images/vd-d1542/Background_D1542_20190212_final_003.tiff')
 
 ###### Finding the real center (dots) of the viewer ######

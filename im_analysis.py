@@ -73,7 +73,7 @@ y_hist.invert_xaxis()
 
 #t= pd.to_datetime
 timestring = (datetime.datetime.now()).strftime("%m-%d_%H:%M.%f")
-plt.savefig('ViewerCenter'+'_'+timestring+'.png', dpi=300)
+plt.savefig('/user/secaruser/Documents/Viewer-Image-Analysis/Feb_21_results/ViewerCenter'+'_'+timestring+'.png', dpi=300)
 #plt.show()
  
 
