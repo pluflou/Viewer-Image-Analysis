@@ -61,10 +61,6 @@ def findMedian(profile):
         frac=sumInt/sum_total
         if (frac>0.15 and frac<0.17):
             sign=i
-        elif (frac>0.49 and frac<0.51):
-            #print("Case 1. Index: ", i)
-            #print(i)
-            median=i
         elif (frac>0.48 and frac<0.52):
             median=i
         elif (frac>0.45 and frac<0.54):

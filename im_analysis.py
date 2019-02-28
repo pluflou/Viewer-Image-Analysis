@@ -25,55 +25,52 @@ y_smooth=savgol_filter(image.profile_y, 5, 3)
 x_smooth=savgol_filter(image.profile_x, 5, 3)
 
 #Fit the profiles to selected models and find the point where the median of the data lays
-x_med, x_sigp, x_sign =models[x_profile_model](x_smooth,x)
-y_med, y_sigp, y_sign =models[y_profile_model](y_smooth,y)
+#x_med, x_sigp, x_sign =models[x_profile_model](x_smooth,x)
+#y_med, y_sigp, y_sign =models[y_profile_model](y_smooth,y)
 #UPDATE 2/12/19:
 #instead of fitting with a model, take range that contains of 68% of data without fitting
-#x_med, x_sigp, x_sign = findMedian(x_smooth)
-#y_med, y_sigp, y_sign = findMedian(y_smooth)
+x_med, x_sigp, x_sign = findMedian(x_smooth)
+y_med, y_sigp, y_sign = findMedian(y_smooth)
+x_peak, x_peak_idx= x_smooth.max(), list(x_smooth).index(x_smooth.max())
+y_peak, y_peak_idx= y_smooth.max(), list(y_smooth).index(y_smooth.max())
 
 #### plot and save results ####
-fig = plt.figure(figsize=(10, 7))
-grid = plt.GridSpec(5, 5, hspace=0.35, wspace=0)
+fig = plt.figure(figsize=(9, 5))
+grid = plt.GridSpec(5, 7, hspace=0.35, wspace=0)
 main_ax = fig.add_subplot(grid[:-1, 1:])
-#plt.text(210, 5, "Data Median: X=%.1f, Y=%.1f\n Viewer Center: \n Scale: 1 mm is %.1f pixels" %(x_med, y_med, scale/5), size=10,
-#         ha="right", va="top",
-#         bbox=dict(boxstyle="round",
-#                   ec=(0, 0, 0.5),
-#                   fc=(1, 1, 1),
-#                   )
-#        )
+plt.setp(main_ax.get_xticklabels(), fontsize=6)
+plt.setp(main_ax.get_yticklabels(), fontsize=6)
 #Adding subplots for the profiles
-y_hist = fig.add_subplot(grid[:-1, 0], sharey=main_ax)
-x_hist = fig.add_subplot(grid[-1, 1:], sharex=main_ax)
+y_hist = fig.add_subplot(grid[:-1, 1], sharey=main_ax)
+x_hist = fig.add_subplot(grid[-1, 2:6], sharex=main_ax)
 
 #Plot the reduced image in center 
 main_ax.imshow(image.subtracted_data)
-main_ax.set_title("Image: "+sys.argv[1]+ "\nScale: %.1f mm is 1 pixel\nData Median: X=%.1f, Y=%.1f, Viewer Center: X=169, Y=164\nCenter X-pos: %.1f mm, Center Y-pos: %.1f mm" %(5/scale, x_med, y_med, abs(x_med-169)*(5/scale), abs(y_med-164)*(5/scale)), fontsize=12)
+main_ax.set_title("Image: "+sys.argv[1]+ "\nScale: %.1f mm is 1 pixel\nCenter X-pos: %.1f +/- %.1f mm, Center Y-pos: %.1f +/- %.1f mm" %(5/scale, abs(x_med-169)*(5/scale), abs(x_peak_idx-x_med)*(5/scale), abs(y_med-164)*(5/scale), abs(y_peak_idx-y_med)*(5/scale)), fontsize=12)
+#Data Median: X=%.1f, Y=%.1f, Viewer Center: X=169, Y=164#
 main_ax.plot([0, image.shape[1]], [y_med,y_med], linewidth=1, color='r')
 main_ax.plot( [x_med, x_med], [0, image.shape[0]], linewidth=1, color='r')
 #Plotting dots. Their location is relative to to selected region of the light_image
 main_ax.plot(x_min+peaks[:,1], peaks[:,0]+y_min,  'o', markeredgecolor='r', markerfacecolor='none', markersize=5)
+
 print("Dots are at: \n X:", x_min+peaks[:,1]," Y: ", peaks[:,0]+y_min)
+
 # plot the x and y profiles
+orange=(200/255,82/255,0/255)
 x_hist.plot(x, image.profile_x)
-x_hist.plot([x_med,x_med],[0, image.profile_x.max()],  linewidth=0.6, color='r', marker='.')
-#x_hist.plot([x_sigp,x_sigp],[0, image.profile_x.max()],  linewidth=0.6, color='r', linestyle='-')
-#x_hist.plot([x_sign,x_sign],[0, image.profile_x.max()],  linewidth=0.6, color='r',  linestyle='-')
-#x_hist.set_xlabel("Center X-pos. is at %.1f mm" %(abs(x_med-169)*(5/scale)), fontsize=11)
+x_hist.plot([x_med,x_med],[0, x_peak],  linewidth=0.6, color='r', marker='.', markersize=4, label="Median")
+x_hist.plot([x_peak_idx,x_peak_idx],[0, x_peak],  linewidth=0.6, color=orange, linestyle='-', label="Peak")
+x_hist.legend(loc="upper right", prop={'size':8})
+
 
 y_hist.plot(image.profile_y, y)
-y_hist.plot([0, image.profile_y.max()], [y_med, y_med], linewidth=0.6, color='r', marker='.')
-#y_hist.plot([0, image.profile_y.max()], [y_sign, y_sign], linewidth=0.6, color='r',  linestyle='-')
-#y_hist.plot([0, image.profile_y.max()], [y_sigp, y_sigp], linewidth=0.6, color='r',  linestyle='-')
-#y_hist.set_title("Center Range between\n%.1f and %.1f pixels" %(y_sign, y_sigp), fontsize=11)
-#y_hist.invert_yaxis()
-
+y_hist.plot([0, y_peak], [y_med, y_med], linewidth=0.6, color='r', marker='.', markersize=4, label="Median")
+y_hist.plot([0, y_peak], [y_peak_idx, y_peak_idx], linewidth=0.6, color=orange,  linestyle='-', label="Peak")
 y_hist.invert_xaxis()
 
-#t= pd.to_datetime
+
 timestring = (datetime.datetime.now()).strftime("%m-%d_%H:%M.%f")
-plt.savefig('2_22_ViewerCenter'+'_'+timestring+'.png', dpi=300)
+plt.savefig('ViewerCenter'+'_'+timestring+'.png', dpi=300)
 plt.show()
  
 
