@@ -46,8 +46,11 @@ x_hist = fig.add_subplot(grid[-1, 2:6], sharex=main_ax)
 
 #Plot the reduced image in center 
 main_ax.imshow(image.subtracted_data)
-main_ax.set_title("Image: "+sys.argv[1]+ "\nScale: %.1f mm is 1 pixel\nCenter X-pos: %.1f +/- %.1f mm, Center Y-pos: %.1f +/- %.1f mm" %(5/scale, abs(x_med-169)*(5/scale), abs(x_peak_idx-x_med)*(5/scale), abs(y_med-164)*(5/scale), abs(y_peak_idx-y_med)*(5/scale)), fontsize=12)
+try:
+	main_ax.set_title("Image: "+sys.argv[1]+ "\nScale: %.1f mm is 1 pixel\nCenter X-pos: %.1f +/- %.1f mm, Center Y-pos: %.1f +/- %.1f mm" %(5/scale, abs(x_med-169)*(5/scale), abs(x_peak_idx-x_med)*(5/scale), abs(y_med-164)*(5/scale), abs(y_peak_idx-y_med)*(5/scale)), fontsize=12)
 #Data Median: X=%.1f, Y=%.1f, Viewer Center: X=169, Y=164#
+except NameError:
+	main_ax.set_title("Image: "+sys.argv[1]+ "\nScale: Not Found\nRaw Center X-pos: %.1f +/- %.1f px, Center Y-pos: %.1f +/- %.1f px" %(abs(x_med), abs(x_peak_idx-x_med), abs(y_med), abs(y_peak_idx-y_med)), fontsize=12)
 main_ax.plot([0, image.shape[1]], [y_med,y_med], linewidth=1, color='r')
 main_ax.plot( [x_med, x_med], [0, image.shape[0]], linewidth=1, color='r')
 #Plotting dots. Their location is relative to to selected region of the light_image
