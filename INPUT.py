@@ -21,9 +21,10 @@ bg= io.imread('D1542_images/D1542_2_22_17_34_bg_053.tiff')
 #Enter here path and name of the image of the viewer with light on. 
 #Make sure it is compatible (same size and taken at the same time) with tune!
 #light_image= io.imread('tiff_files/180720_D1542_S20_2_003.tiff')
-light_image= io.imread('D1542_images/Light_on_D1542_20190211_final_002.tiff')
+#light_image= io.imread('D1542_images/Light_on_D1542_20190211_final_002.tiff')
+light_image= io.imread('/mnt/daqtesting/secar_camera/new_captures/vd-d1515/D1515_lighton_3_6_adjusted_027.tif')
 
-#Define here middle region of viewer in pixels
+ #Define here middle region of viewer in pixels
 #It helps to look at the image first and then refine the region after seeing matches
 y_min= 100 #vertical axis in image
 y_max= 240
