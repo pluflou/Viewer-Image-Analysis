@@ -14,14 +14,14 @@ raw_image= io.imread(sys.argv[1])
 #raw_image= io.imread('tiff_files/Tune115_07722018_viewer_D1542_001.tiff')
 
 #Enter here path and name of the background image (make sure it is the SAME SIZE as the tune image)
-bg= io.imread('D1542_images/D1542_bg_3_11_8pm_057.tiff')
+bg= io.imread('images/D1542_images/D1542_bg_3_11_8pm_057.tiff')
 #bg= io.imread('/user/secaruser/Documents/viewer_images/vd-d1542/Background_D1542_20190212_final_003.tiff')
 
 ###### Finding the real center (dots) of the viewer ######
 #Enter here path and name of the image of the viewer with light on. 
 #Make sure it is compatible (same size and taken at the same time) with tune!
 #light_image= io.imread('tiff_files/180720_D1542_S20_2_003.tiff')
-light_image= io.imread('D1542_images/D1542_lighton_3_11_063.tiff')
+light_image= io.imread('images/D1542_images/D1542_lighton_3_11_063.tiff')
 
 #Define here middle region of viewer in pixels
 #It helps to look at the image first and then refine the region after seeing matches
