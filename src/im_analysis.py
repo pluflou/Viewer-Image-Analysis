@@ -74,7 +74,7 @@ x_hist.plot(x, image.profile_x)
 x_hist.plot([x_med,x_med],[0, x_peak],  linewidth=0.6, color='r', marker='.', markersize=4, label="Median")
 x_hist.plot([x_peak_idx,x_peak_idx],[0, x_peak],  linewidth=0.6, color='gray', linestyle='-', label="Peak")
 x_hist.legend(loc="upper right", prop={'size':8})
-xticks=[0,15,30,45,60,75,90,105,120,135,150,165]
+xticks=[0,15,30,45,60,75,90,105,120,135,150,165,180,195]
 x_hist.set_xticks(xticks)
 plt.xticks(rotation=30)
 
@@ -82,14 +82,14 @@ plt.xticks(rotation=30)
 y_hist.plot(image.profile_y, y)
 y_hist.plot([0, y_peak], [y_med, y_med], linewidth=0.6, color='r', marker='.', markersize=4, label="Median")
 y_hist.plot([0, y_peak], [y_peak_idx, y_peak_idx], linewidth=0.6, color='gray',  linestyle='-', label="Peak")
-yticks=[0,15,30,45,60,75,90,105,120,135,150,165]
+yticks=[0,15,30,45,60,75,90,105,120,135,150,165,180,195]
 y_hist.set_yticks(yticks)
 y_hist.invert_xaxis()
 
 
 timestring = (datetime.datetime.now()).strftime("%m-%d_%H:%M.%f")
 image_name='D1542'+'_'+timestring+'.png'
-plt.savefig('../output/'+image_name, dpi=300)
+plt.savefig('/home/sara/Documents/SECAR/Diagnostics/Viewer-Image-Analysis/output/'+image_name, dpi=300)
 #np.savetxt('Loc_'+image_name+'.csv', [beam_location], header="X-Median (px), Y-Median (px), X-Peak (px), Y-Peak (px), X-Location (mm), Y-Location (mm)")
 plt.show()
  
