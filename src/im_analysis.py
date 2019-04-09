@@ -74,8 +74,8 @@ y_hist.invert_xaxis()
 
 
 timestring = (datetime.datetime.now()).strftime("%m-%d_%H:%M.%f")
-plt.savefig('../output/ViewerCenter'+'_'+timestring+'.png', dpi=300)
-plt.show()
+plt.savefig('/user/secaruser/Documents/Viewer-Image-Analysis/output/4_4_ViewerCenter'+'_'+timestring+'.png', dpi=300)
+#plt.show()
  
 
 
