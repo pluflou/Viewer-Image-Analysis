@@ -14,7 +14,7 @@ raw_image= io.imread(sys.argv[1])
 #raw_image= io.imread('tiff_files/Tune115_07722018_viewer_D1542_001.tiff')
 
 #Enter here path and name of the background image (make sure it is the SAME SIZE as the tune image)
-bg= io.imread('/mnt/daqtesting/secar_camera/new_captures/April_4/D1542/D1542_4_4_5pm_bg_114.tiff')
+bg= io.imread('/mnt/daqtesting/secar_camera/new_captures/April_5/D1542/D1542_4_5_1pm_bg_127.tiff')
 #bg= io.imread('/home/sara/Documents/SECAR/Diagnostics/Viewer-Image-Analysis/images/3_25_images/E25_1/D1542_3_25_bg_10_pm_068.tiff')
 
 
@@ -37,10 +37,10 @@ light_image= io.imread('/mnt/daqtesting/secar_camera/new_captures/April_4/D1542/
 #x_max= 870
 
 ##D1542##
-y_min= 20 #vertical axis in image
-y_max= 170
-x_min= 20 #horizontal axis in image
-x_max= 170
+y_min= 70 #vertical axis in image
+y_max= 120
+x_min= 120 #horizontal axis in image
+x_max= 189
 
 d1542_center= [84, 82] #x,y -- update this when viewer moves in the screen
 

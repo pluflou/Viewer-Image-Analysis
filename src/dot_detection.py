@@ -76,7 +76,7 @@ else:
 #setting conversion
 px_to_mm= 5/scale
 
-d1542_center= [83, 83] #x,y -- update this when viewer moves in the screen
+d1542_center= [163, 93] #x,y -- update this when viewer moves in the screen
 
 #recreating the correct dots on viewer to plot
 d1542_dots=[[d1542_center[0],d1542_center[0],d1542_center[0], d1542_center[0]+ scale, 

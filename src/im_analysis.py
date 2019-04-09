@@ -74,7 +74,7 @@ x_hist.plot(x, image.profile_x)
 x_hist.plot([x_med,x_med],[0, x_peak],  linewidth=0.6, color='r', marker='.', markersize=4, label="Median")
 x_hist.plot([x_peak_idx,x_peak_idx],[0, x_peak],  linewidth=0.6, color='gray', linestyle='-', label="Peak")
 x_hist.legend(loc="upper right", prop={'size':8})
-xticks=[0,15,30,45,60,75,90,105,120,135,150,165,180,195]
+xticks=[0,15,30,45,60,75,90,105,120,135,150,165,180,195,210,235,250,265, 280]
 x_hist.set_xticks(xticks)
 plt.xticks(rotation=30)
 
@@ -88,10 +88,10 @@ y_hist.invert_xaxis()
 
 
 timestring = (datetime.datetime.now()).strftime("%m-%d_%H:%M.%f")
-image_name='D1542'+'_'+timestring+'.png'
-plt.savefig('/user/secaruser/Documents/Viewer-Image-Analysis/output/4_4_ViewerCenter'+image_name, dpi=300)
-#np.savetxt('Loc_'+image_name+'.csv', [beam_location], header="X-Median (px), Y-Median (px), X-Peak (px), Y-Peak (px), X-Location (mm), Y-Location (mm)")
-plt.show()
+image_name='D1542'+'_'+timestring
+plt.savefig('/user/secaruser/Documents/Viewer-Image-Analysis/output/April_5/ViewerCenter'+image_name+'.png', dpi=300)
+np.savetxt('/user/secaruser/Documents/Viewer-Image-Analysis/output/April_5/Loc_'+image_name+'.csv', [beam_location], header="X-Median (px), Y-Median (px), X-Peak (px), Y-Peak (px), X-Location (mm), Y-Location (mm)")
+#plt.show()
 
  
 
