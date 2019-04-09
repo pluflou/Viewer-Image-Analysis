@@ -38,7 +38,7 @@ class Image:
             for j in range(self.x_size): #loop over all x for each y: gives one number
                 sum=sum + self.subtracted_data[i][j]
             self.profile_y.append(sum)
-        self.offset_y= np.mean(self.profile_y[1:5])
+        self.offset_y= np.mean(self.profile_y[1:15])
         self.profile_y=self.profile_y[1:]- self.offset_y      
      
         #PROFILE IN X
@@ -48,7 +48,7 @@ class Image:
             for j in range(self.y_size): #loop over all y for each x: gives one number
                 sum=sum + self.subtracted_data[j][i]
             self.profile_x.append(sum)
-        self.offset_x=np.mean(self.profile_x[1:5])
+        self.offset_x=np.mean(self.profile_x[1:15])
         self.profile_x=self.profile_x[1:]-self.offset_x
 
 def findMedian(profile):
@@ -65,8 +65,12 @@ def findMedian(profile):
             median=i
         elif (frac>0.45 and frac<0.54):
             median=i
+        elif (frac>0.41 and frac<0.58):
+            median=i
         elif (frac>0.83 and frac<0.85):
             sigp=i
+    if (median==0):
+        print("Error when finding median. Check im_reduction ln 62.")
     return  median, sigp, sign
 
 def skewedgauss_fit(profile, x):
