@@ -6,12 +6,10 @@ import datetime
 import sys
 import numpy as np
 import matplotlib.pyplot as plt
-from matplotlib.ticker import AutoMinorLocator
- 
 import matplotlib as mpl
-import scipy.signal as signal
-from lmfit import Model
-from lmfit.models import GaussianModel, SkewedGaussianModel, LorentzianModel, VoigtModel
+#import scipy.signal as signal
+#from lmfit import Model
+#from lmfit.models import GaussianModel, SkewedGaussianModel, LorentzianModel, VoigtModel
 from scipy.signal import savgol_filter
 import warnings
 warnings.filterwarnings("ignore")
@@ -74,27 +72,26 @@ x_hist.plot(x, image.profile_x)
 x_hist.plot([x_med,x_med],[0, x_peak],  linewidth=0.6, color='r', marker='.', markersize=4, label="Median")
 x_hist.plot([x_peak_idx,x_peak_idx],[0, x_peak],  linewidth=0.6, color='gray', linestyle='-', label="Peak")
 x_hist.legend(loc="upper right", prop={'size':8})
-xticks=[0,15,30,45,60,75,90,105,120,135,150,165,180,195,210,235,250,265, 280]
+xticks=[i for i in range(image.x_size) if i%20==0]
 x_hist.set_xticks(xticks)
 plt.xticks(rotation=30)
-
 
 y_hist.plot(image.profile_y, y)
 y_hist.plot([0, y_peak], [y_med, y_med], linewidth=0.6, color='r', marker='.', markersize=4, label="Median")
 y_hist.plot([0, y_peak], [y_peak_idx, y_peak_idx], linewidth=0.6, color='gray',  linestyle='-', label="Peak")
-yticks=[0,15,30,45,60,75,90,105,120,135,150,165,180,195]
+yticks= [i for i in range(image.y_size) if i%20==0]
 y_hist.set_yticks(yticks)
 y_hist.invert_xaxis()
 
+#check that paths exists/create it
+mkdir_p(output_path)
 
+#save results
 timestring = (datetime.datetime.now()).strftime("%m-%d_%H:%M.%f")
-image_name='D1542'+'_'+timestring
-plt.savefig('/user/secaruser/Documents/Viewer-Image-Analysis/output/April_5/ViewerCenter'+image_name+'.png', dpi=300)
-np.savetxt('/user/secaruser/Documents/Viewer-Image-Analysis/output/April_5/Loc_'+image_name+'.csv', [beam_location], header="X-Median (px), Y-Median (px), X-Peak (px), Y-Peak (px), X-Location (mm), Y-Location (mm)")
-#plt.show()
+image_name= viewer_loc + '_' + timestring
+#plt.savefig(output_path+'ViewerCenter'+image_name+'.png', dpi=300)
+#np.savetxt(output_path+ 'BeamLoc_' + image_name + '.csv', [beam_location], header="X-Median (px), Y-Median (px), X-Peak (px), Y-Peak (px), X-Location (mm), Y-Location (mm)")
 
- 
-
-
-
+if (show_plots== True):
+	plt.show()
 

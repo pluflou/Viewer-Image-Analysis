@@ -22,7 +22,7 @@ while (flag):
     elif (peaks.shape[0]<=5):
         #print("Dots detected in ROI are at:\n", peaks)
         dots_in_image= [x_min+peaks[:,1],peaks[:,0]+y_min]
-        print("Dots in original image are at [X,Y]: \n", dots_in_image)
+        print("Dots on these viewer images are at [X,Y]: \n {:4}".format(np.matrix(dots_in_image)))
         flag= False
         continue
     else:
@@ -40,7 +40,6 @@ for j in range(len(peaks)-1):
             dx.append(dist)
             #print(j, i, peaks[j][0], peaks[i][0], dist, dx)
 
-       # print(j, i, peaks[j][0], peaks[i][0])
         if ((peaks[j][1]==peaks[i][1])& (j!=i)): #find dots that share y-position
             dist = math.hypot(peaks[j][0]-peaks[i][0], peaks[j][1]-peaks[i][1])
             dy.append(dist)
@@ -49,12 +48,12 @@ for j in range(len(peaks)-1):
 #select the correct distance corresponding to two dots separated by 5mm
 try:
     scale_x=min(dx)
-    print("5 mm (x-dir) correspond to ", scale_x, " pixels.")
+    print("5 mm (x-dir) correspond to {} pixels.".format(scale_x))
 except ValueError:
     print("Could not find dots on same x-axis")
 try:
     scale_y=min(dy)
-    print("5 mm (y-dir) correspond to ", scale_y, " pixels.")
+    print("5 mm (y-dir) correspond to {} pixels.".format(scale_y))
 except ValueError:
     print("Could not find dots on same y-axis")
 
@@ -75,8 +74,6 @@ else:
 
 #setting conversion
 px_to_mm= 5/scale
-
-d1542_center= [163, 93] #x,y -- update this when viewer moves in the screen
 
 #recreating the correct dots on viewer to plot
 d1542_dots=[[d1542_center[0],d1542_center[0],d1542_center[0], d1542_center[0]+ scale, 
@@ -107,12 +104,3 @@ ax3.autoscale(False)
 ax3.plot(peaks[:,1], peaks[:,0], 'o', markeredgecolor='r', markerfacecolor='none', markersize=10)
 for row in peaks:
     ax3.text(row[1],row[0],(x_min+row[1],y_min+row[0]))
-#plt.show()
-
-
-
-
-
-
-
-
