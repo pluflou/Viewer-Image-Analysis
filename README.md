@@ -36,8 +36,8 @@ scipy (signal package)
 
 **To be done in the future**
 
-- [] Integration with an optimizing routine for automatic tuning
-- [] Better way of calculating offsets.
-- [] Automatic  detection of peaks and of finding initial guesses for model fitting.
-- [] Optimized fitting routines and selection of best model by comparison of residuals.
-- [] More robust detection of dots on the viewer.
+- [ ] Integration with an optimizing routine for automatic tuning
+- [ ] Better way of calculating offsets.
+- [ ] Automatic  detection of peaks and of finding initial guesses for model fitting.
+- [ ] Optimized fitting routines and selection of best model by comparison of residuals.
+- [ ] More robust detection of dots on the viewer.
