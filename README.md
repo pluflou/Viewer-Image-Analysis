@@ -1,5 +1,5 @@
 ##Viewer image analysis for SECAR program 
-
+ ![viewer_example](output/march_beam.gif)
 #Packages needed:
 numpy, matplotlib, math
 scikit-image (skimage for io of images, feature detection, peak locating)
