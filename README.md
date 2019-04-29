@@ -5,30 +5,28 @@
 Example outputs:
  ![viewer_example](output/march_beam.gif)
  
-
-Original pre-processing example image | Viewer with light on
--------------------------|-------------------------
-![example-raw](tiff_files/Tune118_07722018_viewer_D1542_001.tiff) | ![example-light](tiff_files/light_on_viewer_D1542_002.tiff)
+![example-raw](./images/PNGs/Tune118_07722018_viewer_D1542_001.png "Original pre-processing example image") ![example-light](./images/PNGs/light_on_viewer_D1542_002.png "Viewer with light on")
  
 **Packages needed**
 
-numpy, matplotlib, math
-scikit-image (skimage for io of images, feature detection, peak locating)
-lmfit (for fitting beam profiles)
-scipy (signal package)
+numpy, matplotlib, math,
+scikit-image (skimage for io of images, feature detection, peak locating),
+lmfit (for fitting beam profiles),
+scipy (signal package),
 datetime
 
 **How to run**
 
 1. Input paths to images and necesary details in INPUT.py
-  a. select the image to analyze, with its corresponding background image
-  b. if the viewer has been removed from the beamline recently, a new image with the light on might be needed to detect the marked center dots
+   a. select the image to analyze, with its corresponding background image
+   b. if the viewer has been removed from the beamline recently, a new image with the light on might be needed to detect the marked center dots
 2. Run with *python3.5 im_analysis.py path/to/tune.tiff*
 
 If you're at the cyclotron lab at MSU:
-. If you're running on an account other than SECAR you might need to install with the --user option (pip install --user package) and run on the *flagtail* node that is running Debian Stretch OS and has python 3.5
-. Code will not work on *fishtank* since that machine runs Python 2.7
-. Make sure to update the paths in the INPUT.py
+
+1. If you're running on an account other than SECAR you might need to install with the --user option (pip install --user package) and run on the *flagtail* node that is running Debian Stretch OS and has python 3.5
+2. Code will not work on *fishtank* since that machine runs Python 2.7
+3. Make sure to update the paths in the INPUT.py
 
 **How it works**
 
