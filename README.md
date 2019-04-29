@@ -5,8 +5,6 @@
 Example outputs:
  ![viewer_example](output/march_beam.gif)
  
-![example-raw](./images/PNGs/Tune118_07722018_viewer_D1542_001.png "Original pre-processing example image") ![example-light](./images/PNGs/light_on_viewer_D1542_002.png "Viewer with light on")
- 
 **Packages needed**
 
 numpy, matplotlib, math,
