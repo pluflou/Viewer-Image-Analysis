@@ -7,8 +7,8 @@ Example outputs:
  
 
 Original pre-processing example image | Viewer with light on
-:-------------------------:|:-------------------------:
-![Alt im](tiff_files/Tune118_07722018_viewer_D1542_001.tiff) | ![Alt im](tiff_files/light_on_viewer_D1542_002.tiff)
+-------------------------|-------------------------
+![example-raw](tiff_files/Tune118_07722018_viewer_D1542_001.tiff) | ![example-light](tiff_files/light_on_viewer_D1542_002.tiff)
  
 **Packages needed**
 
