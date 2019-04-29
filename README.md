@@ -1,11 +1,11 @@
-**Viewer image analysis for SECAR**
+# Viewer image analysis for SECAR
 
 *Analyzes raw images to extract exact position of the beam beam on the viewer plate.*
 
-Example outputs:
+### Example outputs:
  ![viewer_example](output/march_beam.gif)
  
-**Packages needed**
+## Packages needed
 
 numpy, matplotlib, math,
 scikit-image (skimage for io of images, feature detection, peak locating),
@@ -13,7 +13,7 @@ lmfit (for fitting beam profiles),
 scipy (signal package),
 datetime
 
-**How to run**
+## How to run
 
 1. Input paths to images and necesary details in INPUT.py
    a. select the image to analyze, with its corresponding background image
@@ -26,7 +26,7 @@ If you're at the cyclotron lab at MSU:
 2. Code will not work on *fishtank* since that machine runs Python 2.7
 3. Make sure to update the paths in the INPUT.py
 
-**How it works**
+## How it works
 
 1. In the input file, define the tune image, the background image, and the image of the viewer in position, all taken under the same conditions. The image with the light on is used to find the dots to locate the viewer center by matching a template image of the dots to the light on image. This is not necessary but useful. You first have to specify the region where the dots are in pixels to avoid false positives, and you can refine it or change the number of matches needed in *dot_detection.py*.
 
@@ -38,12 +38,12 @@ If you're at the cyclotron lab at MSU:
 
 5. Optional: The beam profiles can be fitted with the models defined in INPUT.py. Plotting the centers of the gaussians can be instead chosen by commenting out the corresponding lines under each model function in *im_reduction.py*. T
  
-**Notes for model fitting**
+## Notes for model fitting
 
 1. A Lorentzian and Voigt model can also be used, among other and any combination thereof. Skewed gaussian and double gaussians have so far been the best fits to recent tunes.
 2. The current models have an arbitrary inital guess that might need to be refined in certain cases. 
 
-**To be done in the future**
+## To be done in the future
 
 - [ ] Integration with an optimizing routine for automatic tuning
 - [ ] Better way of calculating offsets
