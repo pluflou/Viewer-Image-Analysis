@@ -2,8 +2,11 @@
 #Author: Sara Ayoub
 #Date: 2/3/2019
 
-from skimage import  io
-import sys, os, errno
+import errno
+import os
+import sys
+
+from skimage import io
 
 path_to_images= '/mnt/daqtesting/secar_camera/new_captures/'
 path_to_code= '/user/secaruser/Documents/Viewer-Image-Analysis/'   # '/home/sara/Documents/SECAR/Diagnostics/Viewer-Image-Analysis/images/'
@@ -65,4 +68,3 @@ def mkdir_p(path):
 #Options are: single_gaussian, double_gaussian, skewed_gaussian, gaussian_skewed_gaussian
 y_profile_model= 'double_gaussian'
 x_profile_model= 'skewed_gaussian'
-

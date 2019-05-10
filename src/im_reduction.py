@@ -1,8 +1,11 @@
 import sys
+import warnings
+
 import numpy as np
 from lmfit import Model
-from lmfit.models import GaussianModel, SkewedGaussianModel, LorentzianModel, VoigtModel
-import warnings
+from lmfit.models import (GaussianModel, LorentzianModel, SkewedGaussianModel,
+                          VoigtModel)
+
 warnings.filterwarnings("ignore")
 
 class Image:    

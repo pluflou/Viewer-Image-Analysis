@@ -1,27 +1,43 @@
 ### Viewer Dots Detection ###
-from INPUT import *
-import numpy as np
-import matplotlib.pyplot as plt
 import math
-from skimage.feature import match_template, peak_local_max
 import warnings
+
+import matplotlib.pyplot as plt
+import numpy as np
+from skimage.feature import match_template, peak_local_max
+
+from INPUT import *
+
 warnings.filterwarnings("ignore")
 
+
 #Define the center region that surrounds the 5 center dots
-light_image_region=light_image[y_min:y_max,x_min:x_max]
+light_image_region = light_image[y_min:y_max,x_min:x_max]
 
 #Find matched of the dot template selected
-result = match_template(light_image_region, template, pad_input=True) 
+result = match_template(
+    light_image_region, 
+    template, 
+    pad_input=True
+    ) 
 
 flag = True
 while (flag):
-    peaks = peak_local_max(result,min_distance=2,threshold_rel=threshold) # find our peaks
+     # find our peaks
+    peaks = peak_local_max(
+        result,
+        min_distance = 2,
+        threshold_rel = threshold
+        )
     if (peaks.shape[0]>5):
         threshold +=0.05
         #print(peaks.shape)
     elif (peaks.shape[0]<=5):
         #print("Dots detected in ROI are at:\n", peaks)
-        dots_in_image= [x_min+peaks[:,1],peaks[:,0]+y_min]
+        dots_in_image= [
+            x_min+peaks[:,1],
+            peaks[:,0]+y_min
+            ]
         print("Dots on these viewer images are at [X,Y]: \n {:4}".format(np.matrix(dots_in_image)))
         flag= False
         continue
@@ -34,8 +50,10 @@ dy=[]
 
 for j in range(len(peaks)-1):
     for i in range(len(peaks)): #loop over all points
-       # print(j, i, peaks[j][0], peaks[i][0])
-        if ((peaks[j][0]==peaks[i][0])& (j!=i)):  #find dots that share x-position
+
+        # print(j, i, peaks[j][0], peaks[i][0])
+        if ((peaks[j][0]==peaks[i][0]) & (j!=i)):  
+            #find dots that share x-position
             dist = math.hypot(peaks[j][0]-peaks[i][0], peaks[j][1]-peaks[i][1])
             dx.append(dist)
             #print(j, i, peaks[j][0], peaks[i][0], dist, dx)
@@ -76,9 +94,21 @@ else:
 px_to_mm= 5/scale
 
 #recreating the correct dots on viewer to plot
-d1542_dots=[[d1542_center[0],d1542_center[0],d1542_center[0], d1542_center[0]+ scale, 
-            d1542_center[0]- scale],
-[d1542_center[1]+scale,d1542_center[1]-scale,d1542_center[1],d1542_center[1],d1542_center[1]]]
+d1542_dots=
+    [[
+    d1542_center[0],
+    d1542_center[0],
+    d1542_center[0], 
+    d1542_center[0]+ scale, 
+    d1542_center[0]- scale
+    ],
+    [
+    d1542_center[1]+scale,
+    d1542_center[1]-scale,
+    d1542_center[1],
+    d1542_center[1],
+    d1542_center[1]
+    ]]
 	    
 #Show the image, template and dots detected        
 fig = plt.figure(figsize=(5, 5))
@@ -101,6 +131,17 @@ ax3.set_title('Matching Results')
 # highlight matched region
 # x locations are second column of peaks array. (x is columns and y is rows of raw image)
 ax3.autoscale(False)
-ax3.plot(peaks[:,1], peaks[:,0], 'o', markeredgecolor='r', markerfacecolor='none', markersize=10)
+ax3.plot(
+    peaks[:,1], 
+    peaks[:,0], 
+    'o', 
+    markeredgecolor='r',
+    markerfacecolor='none', 
+    markersize=10
+    )
 for row in peaks:
-    ax3.text(row[1],row[0],(x_min+row[1],y_min+row[0]))
+    ax3.text(
+        row[1],
+        row[0],
+        (x_min+row[1],y_min+row[0])
+        )
