@@ -38,7 +38,7 @@ while (flag):
             x_min+peaks[:,1],
             peaks[:,0]+y_min
             ]
-        print("Dots on these viewer images are at [X,Y]: \n {:4}".format(np.matrix(dots_in_image)))
+        #print("Dots on these viewer images are at [X,Y]: \n {:4}".format(np.matrix(dots_in_image)))
         flag= False
         continue
     else:
@@ -94,8 +94,8 @@ else:
 px_to_mm= 5/scale
 
 #recreating the correct dots on viewer to plot
-d1542_dots=
-    [[
+
+d1542_dots = [[
     d1542_center[0],
     d1542_center[0],
     d1542_center[0], 

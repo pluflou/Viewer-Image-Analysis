@@ -31,8 +31,10 @@ x_smooth=savgol_filter(image.profile_x, 5, 3)
 
 #UPDATE 2/12/19:
 #instead of fitting with a model, take the median. Comparing to actual peak can give an idea of error.
-x_med, x_sigp, x_sign = findMedian(x_smooth)
-y_med, y_sigp, y_sign = findMedian(y_smooth)
+x_med, x_sigp, x_sign = findMedian(x_smooth[220:300])
+y_med, y_sigp, y_sign = findMedian(y_smooth[40:180])
+x_med= x_med + 220
+y_med= y_med + 40
 
 x_peak, x_peak_idx= x_smooth.max(), list(x_smooth).index(x_smooth.max())
 y_peak, y_peak_idx= y_smooth.max(), list(y_smooth).index(y_smooth.max())
@@ -45,17 +47,20 @@ y = np.arange(image.y_size)
 x = np.arange(image.x_size)
 
 mpl.style.use('seaborn')
-fig = plt.figure(figsize=(7, 5))
-grid = plt.GridSpec(5, 7, hspace=0, wspace=0)
-main_ax = fig.add_subplot(grid[:-1, 1:])
-
+fig = plt.figure(figsize=(16, 8))
+grid = plt.GridSpec(16, 8, hspace=0, wspace=0)
+main_ax = fig.add_subplot(grid[:-1, 1:]) 
 #main_ax.get_xaxis().set_visible(False)
 plt.setp(main_ax.get_xticklabels(), fontsize=0)
 plt.setp(main_ax.get_yticklabels(), fontsize=0)
 
 #Adding subplots for the profiles
 y_hist = fig.add_subplot(grid[:-1, 1], sharey=main_ax)
-x_hist = fig.add_subplot(grid[-1, 2:6], sharex=main_ax)
+x_hist = fig.add_subplot(grid[-1, 1:], sharex=main_ax)
+
+######
+#print(x_peak)
+######
 
 #Plot the reduced image in center 
 im=main_ax.imshow(image.subtracted_data,  cmap='cividis')
@@ -65,9 +70,8 @@ main_ax.grid(False)
 
 try:
 	main_ax.set_title(
-		"Image: " + sys.argv[1] + 
-		"\nScale: %.1f mm is 1 pixel\nCenter X-pos: %.1f +/- %.1f mm, Center Y-pos: %.1f +/- %.1f mm" 
-		%(px_to_mm, beam_location[4], abs(x_peak_idx-x_med)*px_to_mm, beam_location[5], abs(y_peak_idx-y_med)*px_to_mm),
+		"Center X-pos: %.1f +/- %.1f mm, Center Y-pos: %.1f +/- %.1f mm" 
+		%(beam_location[4], abs(x_peak_idx-x_med)*px_to_mm, beam_location[5], abs(y_peak_idx-y_med)*px_to_mm),
 		fontsize=11
 		)
 except NameError:
@@ -121,7 +125,7 @@ mkdir_p(output_path)
 #save results
 timestring = (datetime.datetime.now()).strftime("%m-%d_%H:%M.%f")
 image_name= viewer_loc + '_' + timestring
-#plt.savefig(output_path + 'ViewerCenter' + image_name + '.png', dpi=300)
+plt.savefig(output_path + 'ViewerCenter' + image_name + '.png', dpi=300)
 #np.savetxt(output_path + 'BeamLoc_' + image_name + '.csv',
 #          [beam_location], 
 #          header="X-Median (px), Y-Median (px), X-Peak (px), Y-Peak (px), X-Location (mm), Y-Location (mm)"
