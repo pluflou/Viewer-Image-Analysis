@@ -6,7 +6,7 @@ from skimage import  io
 import sys, os, errno
 
 path_to_images= '/mnt/daqtesting/secar_camera/new_captures/'
-path_to_code=  '~/Documents/Viewer-Image-Analysis/' # '/user/secaruser/Documents/Viewer-Image-Analysis/'
+path_to_code=  '/user/e18514/Documents/Viewer-Image-Analysis/'
 dir_date= 'optimizer/'
 viewer_loc= 'D1542'
 output_path= path_to_code+'output/'+dir_date
@@ -21,17 +21,17 @@ show_plots= False
 raw_image= io.imread(sys.argv[1])
 
 #Enter here path and name of the background image (make sure it is the SAME SIZE as the tune image)
-bg= io.imread(path_to_images + 'light_bg/D1542_9_12_dipole_scan_bg_001.tiff')
+bg= io.imread(path_to_images + 'D1542_9_12_dipole_scan_bg_001.tiff')
 
 ###### Finding the real center (dots) of the viewer ######
 #Path to updated/compatible image of the viewer with light on. 
-light_image= io.imread(path_to_images+'light_bg/D1542_9_12_dipole_scan_lighton_001.tiff')
+light_image= io.imread(path_to_images+'D1542_9_12_dipole_scan_lighton_001.tiff')
 
 #Define here middle region of viewer in pixels. It helps to look at the image first and then refine the region after seeing matches.
 
 ##D1515##
 #y_min= 200 #vertical axis in image
-#y_max= 320
+#y_max= 320ks
 #x_min= 630 #horizontal axis in image
 #x_max= 870
 
@@ -45,7 +45,8 @@ x_max= 550
 d1542_center= [207, 177] #updated 9/16/2019
 
 #Enter here path and name of the image of the viewer dots you wish to use as a template
-template= io.imread(path_to_code+'tiff_files/dots/dot3.tiff') #dot2 seems good
+dotim= '/user/e18514/Documents/Viewer-Image-Analysis/tiff_files/dots/dot3.tiff'
+template= io.imread(dotim) 
 
 #Enter here the threshold (minimum intensity of peaks) to detect dots on image
 #Don't change this at the beginning. It is better to have a good search region first
@@ -60,10 +61,4 @@ def mkdir_p(path):
 			pass
 		else:
 			raise
-
-###### Fitting beam profiles ##########
-#Use these as default first then decide after looking at profiles if another model is a better fit
-#Options are: single_gaussian, double_gaussian, skewed_gaussian, gaussian_skewed_gaussian
-y_profile_model= 'double_gaussian'
-x_profile_model= 'skewed_gaussian'
 
