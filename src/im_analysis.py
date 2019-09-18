@@ -45,8 +45,8 @@ grid = plt.GridSpec(5, 7, hspace=0, wspace=0)
 main_ax = fig.add_subplot(grid[:-1, 1:])
 
 #main_ax.get_xaxis().set_visible(False)
-plt.setp(main_ax.get_xticklabels(), fontsize=0)
-plt.setp(main_ax.get_yticklabels(), fontsize=0)
+plt.setp(main_ax.get_xticklabels(), fontsize=10)
+plt.setp(main_ax.get_yticklabels(), fontsize=10)
 #Adding subplots for the profiles
 y_hist = fig.add_subplot(grid[:-1, 1], sharey=main_ax)
 x_hist = fig.add_subplot(grid[-1, 2:6], sharex=main_ax)
@@ -74,7 +74,7 @@ x_hist.plot([x_peak_idx,x_peak_idx],[0, x_peak],  linewidth=0.6, color='gray', l
 x_hist.legend(loc="upper right", prop={'size':8})
 xticks=[i for i in range(image.x_size) if i%20==0]
 x_hist.set_xticks(xticks)
-plt.xticks(rotation=30)
+plt.xticks(rotation=45)
 
 y_hist.plot(image.profile_y, y)
 y_hist.plot([0, y_peak], [y_med, y_med], linewidth=0.6, color='r', marker='.', markersize=4, label="Median")
@@ -88,9 +88,9 @@ mkdir_p(output_path)
 
 #save results
 timestring = (datetime.datetime.now()).strftime("%m-%d_%H:%M.%f")
-image_name= viewer_loc + '_' + timestring
-#plt.savefig(output_path+'ViewerCenter'+image_name+'.png', dpi=300)
-#np.savetxt(output_path+ 'BeamLoc_' + image_name + '.csv', [beam_location], header="X-Median (px), Y-Median (px), X-Peak (px), Y-Peak (px), X-Location (mm), Y-Location (mm)")
+image_name= viewer_loc + '_' + sys.argv[1].split(".tiff")[0] #+ timestring
+plt.savefig(output_path+'ViewerCenter'+image_name+'.png', dpi=300)
+np.savetxt(output_path+ 'BeamLoc_' + image_name + '.csv', [beam_location], header="X-Median (px), Y-Median (px), X-Peak (px), Y-Peak (px), X-Location (mm), Y-Location (mm)")
 
 if (show_plots== True):
 	plt.show()

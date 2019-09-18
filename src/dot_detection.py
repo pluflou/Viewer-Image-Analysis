@@ -22,7 +22,7 @@ while (flag):
     elif (peaks.shape[0]<=5):
         #print("Dots detected in ROI are at:\n", peaks)
         dots_in_image= [x_min+peaks[:,1],peaks[:,0]+y_min]
-        print("Dots on these viewer images are at [X,Y]: \n {:4}".format(np.matrix(dots_in_image)))
+        #print("Dots on these viewer images are at [X,Y]: \n {:4}".format(np.matrix(dots_in_image)))
         flag= False
         continue
     else:
