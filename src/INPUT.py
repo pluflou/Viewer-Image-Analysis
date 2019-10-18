@@ -10,11 +10,12 @@ from skimage import io
 
 path_to_images= '/home/sara/Documents/SECAR/Diagnostics/Viewer-Image-Analysis/images/stability_FP2/'  #'/mnt/daqtesting/secar_camera/new_captures/'
 path_to_code= '/home/sara/Documents/SECAR/Diagnostics/Viewer-Image-Analysis/' #'/user/secaruser/Documents/Viewer-Image-Analysis/'   # 
-dir_date= '8_26_19/'
+bin_f = 1
+dir_date= f'FP2_err_{bin_f}pix/'
 viewer_loc= 'D1638'
 output_path= path_to_code+'output/'+dir_date
 
-show_plots= False
+show_plots= False 
 
 #Enter here the images and the methods that will be used for the viewer analysis
 #Make sure to inlcude the path to the images

@@ -22,13 +22,10 @@ class Image:
       
     def subtract_bg(self,bg):
         print("Subtracting background...")
-        if (bg.shape == self.shape): 
+        if (bg.shape == self.shape):
             for i in range(self.y_size):
                 for j in range (self.x_size):
-                    if ((self.raw[i][j]>bg[i][j]).all() and (bg[i][j]>=0).all() and (self.raw[i][j]>=0).all()):
-                        self.subtracted_data[i][j]= self.raw[i][j]-bg[i][j]
-                    elif (bg[i][j]<0):
-                        self.subtracted_data[i][j]= 0
+                    self.subtracted_data[i][j]= self.raw[i][j]-bg[i][j]
             return self.subtracted_data
         else:
             print("Error: Background image size does not match data size.")

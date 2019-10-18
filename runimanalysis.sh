@@ -1,4 +1,4 @@
-for file in /mnt/daqtesting/secar_camera/new_captures/April_5/D1542/*
+for file in /home/sara/Documents/SECAR/Diagnostics/Viewer-Image-Analysis/images/stability_FP2/*.tiff
 do 
 	 python ./src/im_analysis.py "$file"
 done
