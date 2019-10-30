@@ -32,19 +32,20 @@ x = np.arange(image.x_size)
 
 #bin the  data
 ##################################REMOVE THE BIN_F FACTOR AND CHANGE DDOF################################################################
-#x_smooth, x, xbinnumber = stats.binned_statistic(x, image.profile_x, 'sum', bins=len(x)/bin_f)
-#y_smooth, y, ybinnumber = stats.binned_statistic(y, image.profile_y, 'sum', bins=len(y)/bin_f)
-x_smooth = image.profile_x
-y_smooth = image.profile_y
+x_smooth, x, xbinnumber = stats.binned_statistic(x, image.profile_x, 'sum', bins=len(x)/bin_f)
+y_smooth, y, ybinnumber = stats.binned_statistic(y, image.profile_y, 'sum', bins=len(y)/bin_f)
+
+x = x[:-1]
+y = y[:-1]
 
 #Find the mean and sigma of the data
 x_mean = np.average(x, weights = x_smooth, axis=0)
 y_mean = np.average(y, weights = y_smooth, axis=0)
 
 
-x_std = 1#np.std(x_smooth/bin_f, ddof = 0)
-y_std = 1#np.std(y_smooth/bin_f, ddof = 0)
-#'''
+x_std = np.std(x_smooth, ddof = 1)
+y_std = np.std(y_smooth, ddof = 1)
+'''
 #UPDATE 2/12/19:
 #instead of fitting with a model, take the median. Comparing to actual peak can give an idea of error.
 x_med, x_sigp, x_sign = findMedian(x_smooth[220:300])
@@ -57,7 +58,7 @@ y_peak, y_peak_idx= y_smooth.max(), list(y_smooth).index(y_smooth.max())
 
 x_loc, y_loc= (x_med-d1542_center[0]), (d1542_center[1]-y_med) #y-axis is inverted
 beam_location=[x_med, y_med, x_peak_idx, y_peak_idx, x_loc*px_to_mm, y_loc*px_to_mm]
-
+'''
 #### plot and save results ####
 
 mpl.style.use('seaborn')
@@ -86,14 +87,14 @@ try:
 	main_ax.set_title(
 		"Image: "+sys.argv[1][82:-5]+
 		"\nCenter X-pos: %.1f +/- %.1f mm, Center Y-pos: %.1f +/- %.1f mm" 
-		%(beam_location[4], abs(x_peak_idx-x_mean)*px_to_mm, beam_location[5], abs(y_peak_idx-y_mean)*px_to_mm),
+		%(x_mean, x_std*px_to_mm, y_mean, y_std*px_to_mm),
 		fontsize=11
 		)
 except NameError:
 	main_ax.set_title(
 		"Image: "+sys.argv[1]+
 		"\nScale: Not found\nRaw Center X-pos: %.1f +/- %.1f px, Center Y-pos: %.1f +/- %.1f px"
-		%(abs(x_mean), abs(x_peak_idx-x_mean), abs(y_mean), abs(y_peak_idx-y_mean)), 
+		%(x_mean, x_std*px_to_mm, y_mean, y_std*px_to_mm),
 		fontsize=11
 		)
 	
@@ -111,27 +112,23 @@ main_ax.plot(d1542_dots[0][:], d1542_dots[1][:],
 
 # plot the x and y profiles
 #orange=(200/255,82/255,0/255)
-x_hist.plot(x, image.profile_x)
-x_hist.plot([x_mean,x_mean],[0, x_peak],
+x_hist.plot(x, x_smooth)
+x_hist.plot([x_mean,x_mean],[0, x_mean],
             linewidth=0.6, color='r', marker='.', markersize=4, label="Mean"
 			)
-x_hist.plot([x_peak_idx,x_peak_idx],[0, x_peak],
-            linewidth=0.6, color='gray', linestyle='-', label="Peak"
-			)
+
 x_hist.legend(loc="upper right", prop={'size':8})
-xticks=[i for i in range(x.max()) if i%20==0]
-x_hist.set_xticks(xticks)
+#xticks=[i for i in range(x.max()) if i%20==0]
+#x_hist.set_xticks(xticks)
 plt.xticks(rotation=30)
 
-y_hist.plot(image.profile_y, y)
-y_hist.plot([0, y_peak], [y_mean, y_mean], 
+y_hist.plot(y_smooth, y)
+y_hist.plot([0, y_mean], [y_mean, y_mean], 
             linewidth=0.6, color='r', marker='.', markersize=4, label="Mean"
 			)
-y_hist.plot([0, y_peak], [y_peak_idx, y_peak_idx],
-            linewidth=0.6, color='gray',  linestyle='-', label="Peak"
-			)
-yticks= [i for i in range(y.max()) if i%20==0]
-y_hist.set_yticks(yticks)
+
+#yticks= [i for i in range(y.max()) if i%20==0]
+#y_hist.set_yticks(yticks)
 y_hist.invert_xaxis()
 
 #check that paths exists/create it
