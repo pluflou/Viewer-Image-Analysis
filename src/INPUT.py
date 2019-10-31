@@ -25,8 +25,6 @@ show_plots= False
 raw_image= io.imread(sys.argv[1])
 
 #Enter here path and name of the background image (make sure it is the SAME SIZE as the tune image)
-#bg= io.imread(path_to_images + dir_date + viewer_loc +'/D1542_8_26_19_6PM-_bg_141.tiff')
-#bg= 'io.imread(path_to_images + dir_date + '
 bg= io.imread(path_to_images+'/light_bg/BG_crop.tiff')
 
 ###### Finding the real center (dots) of the viewer ######
@@ -46,8 +44,6 @@ light_image= io.imread(path_to_images+'/light_bg/Light_on_crop.tiff')
 #y_max= 120
 #x_min= 120 #horizontal axis in image
 #x_max= 189
-
-
 
 ##D1638## updated 9/11/19
 y_min= 81 #vertical axis in image
@@ -73,9 +69,3 @@ def mkdir_p(path):
 			pass
 		else:
 			raise
-
-###### Fitting beam profiles ##########
-#Use these as default first then decide after looking at profiles if another model is a better fit
-#Options are: single_gaussian, double_gaussian, skewed_gaussian, gaussian_skewed_gaussian
-y_profile_model= 'double_gaussian'
-x_profile_model= 'skewed_gaussian'

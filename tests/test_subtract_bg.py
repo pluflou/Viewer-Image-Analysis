@@ -22,7 +22,7 @@ class Image:
         if (bg.shape == self.shape):
             for i in range(self.y_size):
                 for j in range (self.x_size):
-                    self.subtracted_data[i][j]= int(self.raw[i][j]) - int(bg.raw[i][j])
+                    self.subtracted_data[i][j]= int(self.raw[i][j]) - int(bg[i][j])
                     #print(self.raw[i][j], bg.raw[i][j],self.subtracted_data[i][j] )
             return self.subtracted_data
         else:
