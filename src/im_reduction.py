@@ -21,7 +21,7 @@ class Image:
             for i in range(self.y_size):
                 for j in range (self.x_size):
                     if ((self.raw[i][j]>bg[i][j]).all() and (bg[i][j]>=0).all() and (self.raw[i][j]>=0).all()):
-                        self.subtracted_data[i][j]= int(self.raw[i][j])-int(bg.raw[i][j])
+                        self.subtracted_data[i][j]= int(self.raw[i][j])-int(bg[i][j])
             return self.subtracted_data
         else:
             print("Error: Background image size does not match data size.")
