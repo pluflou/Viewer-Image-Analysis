@@ -14,8 +14,9 @@ class Image:
         self.subtracted_data= np.array([[0 for x in range(self.x_size)] for y in range(self.y_size)])
         self.profile_x= [0 in range (self.x_size)]
         self.profile_y= [0 in range (self.y_size)]
-        self.offset_x= 0 
-        self.offset_y= 0
+        self.error= np.array([[0 for x in range(self.x_size)] for y in range(self.y_size)])
+        self.error_x= [0 in range (self.x_size)]
+        self.error_y= [0 in range (self.y_size)]
       
     def subtract_bg(self,bg):
         print("Subtracting background...")
@@ -23,7 +24,8 @@ class Image:
             for i in range(self.y_size):
                 for j in range (self.x_size):
                     self.subtracted_data[i][j]= int(self.raw[i][j])-int(bg[i][j])
-            return self.subtracted_data
+                    self.error[i][j] = np.sqrt(np.abs(int(self.raw[i][j])) + np.abs(int(bg[i][j])))
+            return self.subtracted_data, self.error
         else:
             print("Error: Background image size does not match data size.")
     
@@ -31,23 +33,31 @@ class Image:
         print("Getting y-axis profile...")
         #PROFILE IN Y
         for i in range(self.y_size): #loop over all y
-            sum=0
+            sum = 0
+            err = 0
             for j in range(self.x_size): #loop over all x for each y: gives one number
-                sum=sum + self.subtracted_data[i][j]
+                sum = sum + self.subtracted_data[i][j]
+                err = err + self.error[i][j]
             self.profile_y.append(sum)
-        self.offset_y= np.mean(self.profile_y[1:15])
-        self.profile_y=self.profile_y[1:]- self.offset_y      
+            self.error_y.append(err)
+        #self.offset_y= np.mean(self.profile_y[1:15])
+        self.profile_y=self.profile_y[1:]
+        self.error_y = self.error_y[1:]    
      
         #PROFILE IN X
         print("Getting x-axis profile...")
         for i in range(self.x_size): #loop over all x
-            sum=0
+            sum = 0
+            err = 0
             for j in range(self.y_size): #loop over all y for each x: gives one number
-                sum=sum + self.subtracted_data[j][i]
+                sum = sum + self.subtracted_data[j][i]
+                err = err + self.error[j][i]
             self.profile_x.append(sum)
-        self.offset_x=np.mean(self.profile_x[1:15])
-        self.profile_x=self.profile_x[1:]-self.offset_x
-'''
+            self.error_x.append(err)
+        #self.offset_x=np.mean(self.profile_x[1:15])
+        self.profile_x=self.profile_x[1:]
+        self.error_x=self.error_x[1:]
+'''      
 def findMedian(profile):
     sum_total=sum(profile)
     median=0
