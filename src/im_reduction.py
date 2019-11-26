@@ -17,6 +17,8 @@ class Image:
         self.error= np.array([[0 for x in range(self.x_size)] for y in range(self.y_size)])
         self.error_x= [0 in range (self.x_size)]
         self.error_y= [0 in range (self.y_size)]
+        self.offset_x= [0]
+        self.offset_y= [0]
       
     def subtract_bg(self,bg):
         print("Subtracting background...")
@@ -40,9 +42,13 @@ class Image:
                 err = err + (self.error[i][j])**2
             self.profile_y.append(sum)
             self.error_y.append(np.sqrt(err))
-        #self.offset_y= np.mean(self.profile_y[1:15])
-        self.profile_y=self.profile_y[1:]
-        self.error_y = self.error_y[1:]    
+
+        offset_seg_y = 0#self.profile_y[0:40]
+        self.offset_y = np.mean(offset_seg_y)
+        self.profile_y= np.asarray(self.profile_y[1:])# - self.offset_y
+
+        #error_offset_y = (np.max(offset_seg_y) -  np.min(offset_seg_y))/(2*np.sqrt(len(offset_seg_y)))
+        self.error_y = self.error_y[1:]#np.sqrt(np.asarray(self.error_y[1:])**2 + error_offset_y**2)    
      
         #PROFILE IN X
         print("Getting x-axis profile...")
@@ -54,9 +60,13 @@ class Image:
                 err = err + (self.error[j][i])**2
             self.profile_x.append(sum)
             self.error_x.append(np.sqrt(err))
-        #self.offset_x=np.mean(self.profile_x[1:15])
-        self.profile_x=self.profile_x[1:]
-        self.error_x=self.error_x[1:]
+
+        offset_seg_x = self.profile_x[460:520]
+        self.offset_x = np.mean( offset_seg_x)
+        self.profile_x= np.asarray(self.profile_x[1:]) - self.offset_x
+        
+        error_offset_x = (np.max(offset_seg_x) -  np.min(offset_seg_x))/(2*np.sqrt(len(offset_seg_x)))
+        self.error_x= np.sqrt(np.asarray(self.error_x[1:])**2 + error_offset_x**2)
 '''      
 def findMedian(profile):
     sum_total=sum(profile)

@@ -24,7 +24,7 @@ y = np.arange(image.y_size)
 x = np.arange(image.x_size)
 
 #print(repr( image.profile_x), repr( image.profile_y), repr(x), repr(y))
-print(repr(image.error_x), "\n \n", repr(image.error_y))
+#print(repr(image.error_x), "\n \n", repr(image.error_y))
 
 #it's called x_smooth because that's what I called it in V1.0 or so when I was smoothing it
 x_smooth = image.profile_x[200:330]
@@ -163,7 +163,7 @@ np.savetxt(output_path + 'BeamLoc_' + image_name + '.csv',
           header="X-Mean (px), Y-Mean (px), X-Peak (px), Y-Peak (px), X-Location (mm), Y-Location (mm)"
  )'''
 
-print(y_mean)
+
 f= open(f"{output_path}/data_mean_stdev_pix.txt", "a+")
 f.write(f'{sys.argv[1][82:-5]} {x_mean} {x_mean_err} {x_std} {x_std_err} {y_mean} {y_mean_err} {y_std} {y_std_err}\n')
 f.close()
