@@ -23,22 +23,24 @@ image.get_profile()
 y = np.arange(image.y_size)
 x = np.arange(image.x_size)
 
+#print(repr( image.profile_x), repr( image.profile_y), repr(x), repr(y))
+print(repr(image.error_x), "\n \n", repr(image.error_y))
+
 #it's called x_smooth because that's what I called it in V1.0 or so when I was smoothing it
 x_smooth = image.profile_x[200:330]
 x_err = image.error_x[200:330]
-x = x[200:330]
-#clipping the y axis to get rid of noise for now
-y_smooth = image.profile_y[:230]
-y_err = image.error_y[:230]
+x_ax = x[200:330]
 
-y = y[:230]
+#clipping the y axis to get rid of noise for now
+y_smooth = image.profile_y[:220]
+y_err = image.error_y[:220]
+y_ax = y[:220]
 
 #Find the mean and sigma of the data
 #should all be in pixels
-#print(repr(x_smooth), repr(y_smooth))
 
-x_mean, x_mean_err, x_std, x_std_err = profStats(x_smooth, x_err, x)
-y_mean, y_mean_err, y_std, y_std_err = profStats(y_smooth, y_err, y)
+x_mean, x_mean_err, x_std, x_std_err = profStats(x_smooth, x_err, x_ax)
+y_mean, y_mean_err, y_std, y_std_err = profStats(y_smooth, y_err, y_ax)
 
 #print("x_mean, x_mean_err, x_std, x_std_err ", x_mean, x_mean_err, x_std, x_std_err)
 #print("y_mean, y_mean_err, y_std, y_std_err ", y_mean, y_mean_err, y_std, y_std_err)
@@ -61,16 +63,18 @@ main_ax = fig.add_subplot(grid[:-1, 1:])
 plt.setp(main_ax.get_xticklabels(), fontsize=0)
 plt.setp(main_ax.get_yticklabels(), fontsize=0)
 
-#Adding subplots for the profiles
-y_hist = fig.add_subplot(grid[:-1, 1], sharey=main_ax)
-x_hist = fig.add_subplot(grid[-1, 1:], sharex=main_ax)
 
 
 #Plot the reduced image in center 
-im=main_ax.imshow(image.subtracted_data,  cmap='cividis')
+#im=main_ax.imshow(image.subtracted_data,  cmap='cividis')
+main_ax.contour(x, y, image.subtracted_data)
 #cax = fig.add_axes([04.27, 0.8, 4.5, 0.05])
 #fig.colorbar(im, cax=cax, orientation='vertical')
 main_ax.grid(False)
+
+#Adding subplots for the profiles
+y_hist = fig.add_subplot(grid[:-1, 1], sharey=main_ax)
+x_hist = fig.add_subplot(grid[-1, 1:], sharex=main_ax)
 
 try:
 	main_ax.set_title(
@@ -90,6 +94,7 @@ except NameError:
 main_ax.plot([0, image.shape[1]], [y_mean,y_mean],
             linewidth=0.6, color='r'
 			)
+
 main_ax.plot( [x_mean, x_mean], [0, image.shape[0]],
             linewidth=0.6, color='r'
 			)
@@ -101,33 +106,41 @@ main_ax.plot(d1542_dots[0][:], d1542_dots[1][:],
 
 # plot the x and y profiles
 #orange=(200/255,82/255,0/255)
-x_hist.plot(x, x_smooth)
+x_hist.plot(x_ax, x_smooth)
 x_hist.plot([x_mean,x_mean],[0, np.max(x_smooth)],
             linewidth=0.6, color='r', marker='.', markersize=4, label="Mean"
 			)
-x_hist.plot([x_mean+x_std,x_mean+x_std],[0, np.max(x_smooth)],
+x_hist.plot( [0, len(image.profile_x)],[0, 0],
+            linewidth=0.6, color='gray', marker='.', markersize=0
+			)
+x_hist.plot( [x_mean+x_mean_err, x_mean+x_mean_err], [0, np.max(x_smooth)],
             linewidth=0.45, color='b', marker='.', markersize=4, label=u"\u00B11\u03C3"
 			)
-x_hist.plot([x_mean-x_std,x_mean-x_std],[0, np.max(x_smooth)],
-            linewidth=0.45, color='b', marker='.', markersize=4
+x_hist.plot( [x_mean-x_mean_err, x_mean-x_mean_err], [0, np.max(x_smooth)],
+           linewidth=0.45, color='b', marker='.', markersize=4
 			)
 x_hist.legend(loc="upper right", prop={'size':9})
-#xticks=[i for i in range(x.max()) if i%20==0]
-#x_hist.set_xticks(xticks)
+xticks=[i for i in range(x.max()) if i%20==0]
+x_hist.set_xticks(xticks)
 plt.xticks(rotation=30)
 
-y_hist.plot(y_smooth, y)
+y_hist.plot(y_smooth, y_ax)
 y_hist.plot([0, np.max(y_smooth)], [y_mean, y_mean], 
             linewidth=0.6, color='r', marker='.', markersize=4, label="Mean"
 			)
-y_hist.plot([0, np.max(y_smooth)], [y_mean+y_std, y_mean+y_std], 
+y_hist.plot([0, 0], [0, len(image.profile_y)], 
+            linewidth=0.6, color='gray', marker='.', markersize=0
+			)
+
+y_hist.plot([0, np.max(y_smooth)], [y_mean+y_mean_err, y_mean+y_mean_err], 
             linewidth=0.45, color='b', marker='.', markersize=4, label=u"\u00B11\u03C3"
 			)
-y_hist.plot([0, np.max(y_smooth)], [y_mean-y_std, y_mean-y_std], 
-            linewidth=0.45, color='b', marker='.', markersize=4
+y_hist.plot([0, np.max(y_smooth)], [y_mean-y_mean_err, y_mean-y_mean_err], 
+           linewidth=0.45, color='b', marker='.', markersize=4
 			)
-#yticks= [i for i in range(y.max()) if i%20==0]
-#y_hist.set_yticks(yticks)
+
+yticks= [i for i in range(y.max()) if i%20==0]
+y_hist.set_yticks(yticks)
 y_hist.invert_xaxis()
 
 
@@ -150,12 +163,13 @@ np.savetxt(output_path + 'BeamLoc_' + image_name + '.csv',
           header="X-Mean (px), Y-Mean (px), X-Peak (px), Y-Peak (px), X-Location (mm), Y-Location (mm)"
  )'''
 
+print(y_mean)
 f= open(f"{output_path}/data_mean_stdev_pix.txt", "a+")
 f.write(f'{sys.argv[1][82:-5]} {x_mean} {x_mean_err} {x_std} {x_std_err} {y_mean} {y_mean_err} {y_std} {y_std_err}\n')
 f.close()
 
-np.savetxt(output_path + 'Xarray_' + image_name + '.csv', np.transpose([x_smooth, x]))
-np.savetxt(output_path + 'Yarray_' + image_name + '.csv', np.transpose([y_smooth, y]))
+#np.savetxt(output_path + 'Xarray_' + image_name + '.csv', np.transpose([x_smooth, x_ax]))
+#np.savetxt(output_path + 'Yarray_' + image_name + '.csv', np.transpose([y_smooth, y_ax]))
 
 if (show_plots== True):
 	plt.show()

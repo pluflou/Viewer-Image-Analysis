@@ -37,9 +37,9 @@ class Image:
             err = 0
             for j in range(self.x_size): #loop over all x for each y: gives one number
                 sum = sum + self.subtracted_data[i][j]
-                err = err + self.error[i][j]
+                err = err + (self.error[i][j])**2
             self.profile_y.append(sum)
-            self.error_y.append(err)
+            self.error_y.append(np.sqrt(err))
         #self.offset_y= np.mean(self.profile_y[1:15])
         self.profile_y=self.profile_y[1:]
         self.error_y = self.error_y[1:]    
@@ -51,9 +51,9 @@ class Image:
             err = 0
             for j in range(self.y_size): #loop over all y for each x: gives one number
                 sum = sum + self.subtracted_data[j][i]
-                err = err + self.error[j][i]
+                err = err + (self.error[j][i])**2
             self.profile_x.append(sum)
-            self.error_x.append(err)
+            self.error_x.append(np.sqrt(err))
         #self.offset_x=np.mean(self.profile_x[1:15])
         self.profile_x=self.profile_x[1:]
         self.error_x=self.error_x[1:]
