@@ -27,14 +27,14 @@ x = np.arange(image.x_size)
 #print(repr(image.error_x), "\n \n", repr(image.error_y))
 
 #it's called x_smooth because that's what I called it in V1.0 or so when I was smoothing it
-x_smooth = image.profile_x[200:330]
-x_err = image.error_x[200:330]
-x_ax = x[200:330]
+x_smooth = image.profile_x#[200:330]
+x_err = image.error_x#[200:330]
+x_ax = x#[200:330]
 
 #clipping the y axis to get rid of noise for now
-y_smooth = image.profile_y[:220]
-y_err = image.error_y[:220]
-y_ax = y[:220]
+y_smooth = image.profile_y#[:220]
+y_err = image.error_y#[:220]
+y_ax = y#[:220]
 
 #Find the mean and sigma of the data
 #should all be in pixels
@@ -45,9 +45,9 @@ y_mean, y_mean_err, y_std, y_std_err = profStats(y_smooth, y_err, y_ax)
 #print("x_mean, x_mean_err, x_std, x_std_err ", x_mean, x_mean_err, x_std, x_std_err)
 #print("y_mean, y_mean_err, y_std, y_std_err ", y_mean, y_mean_err, y_std, y_std_err)
 
-x_loc, y_loc= (x_mean-d1542_center[0]), (d1542_center[1]-y_mean) #y-axis is inverted
-beam_loc=[x_mean, y_mean, x_std, y_std, x_loc*px_to_mm, y_loc*px_to_mm]
-
+#x_loc, y_loc= (x_mean-d1542_center[0]), (d1542_center[1]-y_mean) #y-axis is inverted
+#beam_loc=[x_mean, y_mean, x_std, y_std, x_loc*px_to_mm, y_loc*px_to_mm]
+px_to_mm=1
 
 '''
 f= open(f"data_arrays.txt", "a+")
@@ -100,9 +100,9 @@ main_ax.plot( [x_mean, x_mean], [0, image.shape[0]],
 			)
 
 #Plotting dots. Their location is relative to to selected region of the light_image
-main_ax.plot(d1542_dots[0][:], d1542_dots[1][:],
-            'o', markeredgecolor='red', markerfacecolor='red', markersize=3
-			)
+#main_ax.plot(d1542_dots[0][:], d1542_dots[1][:],
+ #           'o', markeredgecolor='red', markerfacecolor='red', markersize=3
+#			)
 
 # plot the x and y profiles
 #orange=(200/255,82/255,0/255)
@@ -122,7 +122,7 @@ x_hist.plot( [x_mean-x_mean_err, x_mean-x_mean_err], [0, np.max(x_smooth)],
 x_hist.legend(loc="upper right", prop={'size':9})
 xticks=[i for i in range(x.max()) if i%20==0]
 x_hist.set_xticks(xticks)
-plt.xticks(rotation=30)
+plt.xticks(rotation=90)
 
 y_hist.plot(y_smooth, y_ax)
 y_hist.plot([0, np.max(y_smooth)], [y_mean, y_mean], 

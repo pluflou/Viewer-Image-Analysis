@@ -37,6 +37,7 @@ def profStats(prof, prof_err, xx):
 
     #return the mean of the means, the error on the mean
     #and the mean of the stds and the error on that
+
     return avg_mean, std_mean, avg_std, std_std
 
 
@@ -50,7 +51,6 @@ def findMean(xx, prof):
     norm = np.sum(prof)
 
     avg = avg_x/norm
-
     return avg
 
 def findSTD(xx, prof, avg):
