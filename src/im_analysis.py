@@ -86,9 +86,9 @@ main_ax.plot( [x_med, x_med], [0, image.shape[0]],
 			)
 
 #Plotting dots. Their location is relative to to selected region of the light_image
-main_ax.plot(d1542_dots[0][:], d1542_dots[1][:],
-            'o', markeredgecolor='red', markerfacecolor='red', markersize=3
-			)
+#main_ax.plot(d1542_dots[0][:], d1542_dots[1][:],
+ #           'o', markeredgecolor='red', markerfacecolor='red', markersize=3
+#			)
 
 # plot the x and y profiles
 #orange=(200/255,82/255,0/255)

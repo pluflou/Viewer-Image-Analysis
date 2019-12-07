@@ -40,7 +40,7 @@ class Image:
                 sum=sum + self.subtracted_data[i][j]
             self.profile_y.append(sum)
         self.offset_y= np.mean(self.profile_y[1:15])
-        self.profile_y=self.profile_y[1:]- self.offset_y      
+        self.profile_y=self.profile_y[1:]#- self.offset_y      
      
         #PROFILE IN X
         print("Getting x-axis profile...")
@@ -50,7 +50,7 @@ class Image:
                 sum=sum + self.subtracted_data[j][i]
             self.profile_x.append(sum)
         self.offset_x=np.mean(self.profile_x[1:15])
-        self.profile_x=self.profile_x[1:]-self.offset_x
+        self.profile_x=self.profile_x[1:]#-self.offset_x
 
 def findMedian(profile):
     sum_total=sum(profile)
