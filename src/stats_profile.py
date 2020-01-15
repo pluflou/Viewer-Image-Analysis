@@ -66,5 +66,4 @@ def findSTD(xx, prof, avg):
     norm = np.abs(np.sum(prof))
     
     std = np.sqrt(weighted_diff/(norm*(1-1/len(prof))))
-    
     return std

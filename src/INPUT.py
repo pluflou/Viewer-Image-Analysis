@@ -15,7 +15,7 @@ dir_date= f'FP2_err_{bin_f}pix/'
 viewer_loc= 'D1638'
 output_path= path_to_code+'output/'+dir_date
 
-show_plots= False 
+show_plots= True
 
 #Enter here the images and the methods that will be used for the viewer analysis
 #Make sure to inlcude the path to the images

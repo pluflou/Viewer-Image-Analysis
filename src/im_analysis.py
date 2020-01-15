@@ -153,9 +153,9 @@ f.write(f'{sys.argv[1][82:-5]} {x_mean} {x_std} {y_mean} {y_std} {x_mean*px_to_m
 f.close()
 '''
 
-timestring = (datetime.datetime.now()).strftime("%m-%d_%H:%M.%f")
-image_name= viewer_loc + '_' + timestring
-plt.savefig(output_path + 'ViewerCenter' + image_name + '.png', dpi=300)
+#timestring = (datetime.datetime.now()).strftime("%m-%d_%H:%M.%f")
+#image_name= viewer_loc + '_' + timestring
+#plt.savefig(output_path + 'ViewerCenter' + image_name + '.png', dpi=300)
 
 '''
 np.savetxt(output_path + 'BeamLoc_' + image_name + '.csv',
@@ -164,9 +164,9 @@ np.savetxt(output_path + 'BeamLoc_' + image_name + '.csv',
  )'''
 
 
-f= open(f"{output_path}/data_mean_stdev_pix.txt", "a+")
-f.write(f'{sys.argv[1][82:-5]} {x_mean} {x_mean_err} {x_std} {x_std_err} {y_mean} {y_mean_err} {y_std} {y_std_err}\n')
-f.close()
+#f= open(f"{output_path}/data_mean_stdev_pix.txt", "a+")
+#f.write(f'{sys.argv[1][82:-5]} {x_mean} {x_mean_err} {x_std} {x_std_err} {y_mean} {y_mean_err} {y_std} {y_std_err}\n')
+#f.close()
 
 #np.savetxt(output_path + 'Xarray_' + image_name + '.csv', np.transpose([x_smooth, x_ax]))
 #np.savetxt(output_path + 'Yarray_' + image_name + '.csv', np.transpose([y_smooth, y_ax]))

@@ -2,6 +2,9 @@ import sys
 import warnings
 
 import numpy as np
+from lmfit import Model
+from lmfit.models import (GaussianModel, LorentzianModel, SkewedGaussianModel,
+                          VoigtModel)
 
 warnings.filterwarnings("ignore")
 
@@ -12,22 +15,23 @@ class Image:
         self.x_size= image.shape[1]
         self.y_size= image.shape[0]
         self.subtracted_data= np.array([[0 for x in range(self.x_size)] for y in range(self.y_size)])
+        self.error= np.array([[0 for x in range(self.x_size)] for y in range(self.y_size)])
         self.profile_x= [0 in range (self.x_size)]
         self.profile_y= [0 in range (self.y_size)]
-        self.error= np.array([[0 for x in range(self.x_size)] for y in range(self.y_size)])
         self.error_x= [0 in range (self.x_size)]
         self.error_y= [0 in range (self.y_size)]
-        self.offset_x= [0]
-        self.offset_y= [0]
+        self.offset_x= 0 
+        self.offset_y= 0
       
     def subtract_bg(self,bg):
         print("Subtracting background...")
-        if (bg.shape == self.shape):
+        if (bg.shape == self.shape): 
             for i in range(self.y_size):
                 for j in range (self.x_size):
+                    #if ((self.raw[i][j]>bg[i][j]).all() and (bg[i][j]>=0).all() and (self.raw[i][j]>=0).all()):
                     self.subtracted_data[i][j]= int(self.raw[i][j])-int(bg[i][j])
                     self.error[i][j] = np.sqrt(np.abs(int(self.raw[i][j])) + np.abs(int(bg[i][j])))
-            return self.subtracted_data, self.error
+            return self.subtracted_data
         else:
             print("Error: Background image size does not match data size.")
     
@@ -35,39 +39,35 @@ class Image:
         print("Getting y-axis profile...")
         #PROFILE IN Y
         for i in range(self.y_size): #loop over all y
-            sum = 0
-            err = 0
+            sum=0
+            err=0
             for j in range(self.x_size): #loop over all x for each y: gives one number
-                sum = sum + self.subtracted_data[i][j]
+                sum=sum + self.subtracted_data[i][j]
                 err = err + (self.error[i][j])**2
+
             self.profile_y.append(sum)
             self.error_y.append(np.sqrt(err))
 
-        #offset_seg_y = 0#self.profile_y[0:40]
-        #self.offset_y = np.mean(offset_seg_y)
-        self.profile_y= np.asarray(self.profile_y[1:])# - self.offset_y
-
-        #error_offset_y = (np.max(offset_seg_y) -  np.min(offset_seg_y))/(2*np.sqrt(len(offset_seg_y)))
-        self.error_y = self.error_y[1:]#np.sqrt(np.asarray(self.error_y[1:])**2 + error_offset_y**2)    
+        self.offset_y= np.mean(self.profile_y[1:15])
+        self.profile_y=self.profile_y[1:]#- self.offset_y  
+        self.error_y = self.error_y[1:]
+    
      
         #PROFILE IN X
         print("Getting x-axis profile...")
         for i in range(self.x_size): #loop over all x
-            sum = 0
-            err = 0
+            sum=0
+            err=0 
             for j in range(self.y_size): #loop over all y for each x: gives one number
-                sum = sum + self.subtracted_data[j][i]
+                sum=sum + self.subtracted_data[j][i]
                 err = err + (self.error[j][i])**2
             self.profile_x.append(sum)
             self.error_x.append(np.sqrt(err))
 
-        #offset_seg_x = self.profile_x[460:520]
-        #self.offset_x = np.mean( offset_seg_x)
-        self.profile_x= np.asarray(self.profile_x[1:])# - self.offset_x
-        
-        #error_offset_x = (np.max(offset_seg_x) -  np.min(offset_seg_x))/(2*np.sqrt(len(offset_seg_x)))
-        self.error_x= self.error_x[1:] #np.sqrt(np.asarray(self.error_x[1:])**2 + error_offset_x**2)
-'''      
+        self.offset_x=np.mean(self.profile_x[1:15])
+        self.profile_x=self.profile_x[1:]#-self.offset_x
+        self.error_x= self.error_x[1:]
+
 def findMedian(profile):
     sum_total=sum(profile)
     median=0
@@ -89,4 +89,94 @@ def findMedian(profile):
     if (median==0):
         print("Error when finding median. Check im_reduction ln 62.")
     return  median, sigp, sign
-'''
+
+def skewedgauss_fit(profile, x):
+    gauss = SkewedGaussianModel()
+    params = gauss.guess(profile, x=x)
+    output = gauss.fit(profile, params, x=x)
+    
+    #to plot the fit uncomment the line below
+    #fig, gridspec = output.plot(data_kws={'markersize': 1})
+    
+    #find the maximum of the gaussian peak
+    peak=np.array(output.best_fit).max()
+    peak_index=list(output.best_fit).index(peak)
+
+    #find the center of the distribution
+    center_param=np.array(output.params['center'])
+    #fwhm=np.array(output.params['fwhm'])
+    
+    #find the mid point that separates two equal amounts of data
+    median, sigp, sign = findMedian(np.array(output.best_fit))
+    #this mid point will be the 'effective center' of our beam spot
+    #because this will make it easier to compare to the BCM data and it distributes the beam equally over the center
+    return median, sigp, sign
+
+def gauss_fit(profile, x):
+    gauss = GaussianModel()
+    params = gauss.guess(profile, x=x) 
+    output = gauss.fit(profile, params, x=x)
+
+    #to plot the fit uncomment the line below
+    #fig, gridspec = output.plot(data_kws={'markersize': 1})
+    median, sigp, sign = findMedian(np.array(output.best_fit))
+    return median, sigp, sign
+
+def doublegauss_fit(profile, x):
+    gauss1 = GaussianModel(prefix='g1_') 
+    gauss2= GaussianModel(prefix='g2_')
+
+    params_1 = gauss1.make_params(amplitude=250000,center=145, sigma=1)
+    params_2 = gauss2.make_params(amplitude=100000, center=170, sigma=1)
+    pars = params_1.update(params_2)
+
+    mod= gauss1 + gauss2 
+    output = mod.fit(profile, params_1, x=x)
+    median, sigp, sign =findMedian(np.array(output.best_fit))
+
+    #to plot the fit uncomment the line below
+    #fig, gridspec = output.plot(data_kws={'markersize': 1})
+    
+    #to find the center of the fit instead of mid point of data uncomment the section below
+    #g1_c, g2_c=[np.array(output.params['g1_center']), np.array(output.params['g2_center'])]
+    #g1_a, g2_a= [output.params['g1_amplitude'], output.params['g2_amplitude']] 
+    #if (g1_a>g2_a):
+     #   print(g1_c)
+      #  return g1_c
+    #elif (g2_a>g1_a):
+     #   print(g2_c)
+      #  return g2_c
+    #else:
+     #   print("Fit is weird.")
+
+    return median, sigp, sign
+
+
+def doubleSgauss_fit(profile, x):
+    gauss1 = GaussianModel(prefix='g1_') #SkewedGaussianModel(prefix='g1_')
+    gauss2= SkewedGaussianModel(prefix='g2_')
+
+    params_1 = gauss1.make_params(amplitude=300000,center=300, sigma=1)
+    params_2 = gauss2.make_params(amplitude=100000, center=170, sigma=1)
+    pars = params_1.update(params_2)
+    
+    mod= gauss1 + gauss2 
+    output = mod.fit(profile, params_1, x=x)
+    median, sigp, sign =findMedian(np.array(output.best_fit))
+
+    #to plot the fit uncomment the line below
+    #fig, gridspec = output.plot(data_kws={'markersize': 1})
+
+    #to find the center of the fit instead of mid point of data uncomment the section below
+    #g1_c, g2_c=[np.array(output.params['g1_center']), np.array(output.params['g2_center'])]
+    #g1_a, g2_a= [output.params['g1_amplitude'], output.params['g2_amplitude']]
+    #if (g1_a>g2_a):
+     #   return g1_c
+    #elif (g2_a>g1_a):
+     #   return g2_c
+    #else:
+      #  print("Fit is weird.")
+
+    return median, sigp, sign
+
+models= {'single_gaussian': gauss_fit , 'double_gaussian': doublegauss_fit , 'skewed_gaussian': skewedgauss_fit , 'gaussian_skewed_gaussian': doubleSgauss_fit }
