@@ -24,7 +24,10 @@ def profStats(prof, prof_err, xx):
     for k in range(0, iter_num):
         xmc_mean[k] = findMean(xx, xmc_data[k])
         xmc_std[k] = findSTD(xx, xmc_data[k], xmc_mean[k])
-
+    
+    #added this variable to pass array to save the data for plotting
+    pr_mean= (xmc_mean)
+    
     xmc_mean = np.array(xmc_mean)
     xmc_std = np.array(xmc_std)
 
@@ -37,8 +40,8 @@ def profStats(prof, prof_err, xx):
 
     #return the mean of the means, the error on the mean
     #and the mean of the stds and the error on that
-
-    return avg_mean, std_mean, avg_std, std_std
+    
+    return avg_mean, std_mean, avg_std, std_std, pr_mean
 
 
 def findMean(xx, prof):

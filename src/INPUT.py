@@ -8,14 +8,14 @@ import sys
 
 from skimage import io
 
-path_to_images= '/home/sara/Documents/SECAR/Diagnostics/Viewer-Image-Analysis/images/stability_FP2/originals'  #'/mnt/daqtesting/secar_camera/new_captures/'
+path_to_images= '/home/sara/Documents/SECAR/Diagnostics/Viewer-Image-Analysis/images/stability_FP2/cropped'  #'/mnt/daqtesting/secar_camera/new_captures/'
 path_to_code= '/home/sara/Documents/SECAR/Diagnostics/Viewer-Image-Analysis/' #'/user/secaruser/Documents/Viewer-Image-Analysis/'   # 
 bin_f = 1
-dir_date= f'FP2_err_{bin_f}pix/'
+dir_date= f'FP2_err_report/'
 viewer_loc= 'D1638'
 output_path= path_to_code+'output/'+dir_date
 
-show_plots= True
+show_plots= False
 
 #Enter here the images and the methods that will be used for the viewer analysis
 #Make sure to inlcude the path to the images
@@ -25,8 +25,8 @@ show_plots= True
 raw_image= io.imread(sys.argv[1])
 
 #Enter here path and name of the background image (make sure it is the SAME SIZE as the tune image)
-bg= io.imread(path_to_images+'/D1568_8_28_19_overnight_stability_056_BG.tiff')                          #/light_bg/BG_crop.tiff')
-
+bg= io.imread('/home/sara/Documents/SECAR/Diagnostics/Viewer-Image-Analysis/images/stability_FP2/light_bg/BG_crop.tiff')
+#bg= io.imread(path_to_images+'/D1568_8_28_19_overnight_stability_056_BG.tiff')  
 ###### Finding the real center (dots) of the viewer ######
 #Path to updated/compatible image of the viewer with light on. 
 light_image= io.imread('/home/sara/Documents/SECAR/Diagnostics/Viewer-Image-Analysis/images/stability_FP2/light_bg/Light_on_crop.tiff')
