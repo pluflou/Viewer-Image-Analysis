@@ -1,14 +1,19 @@
 ### Image Analysis ###
-from INPUT import *
-from dot_detection import *
-from im_reduction import *
 import datetime
 import sys
+import warnings
+
 import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib as mpl
-from scipy.signal import savgol_filter
-import warnings
+from scipy import stats
+from statsmodels.stats.weightstats import DescrStatsW
+
+from INPUT import *
+from dot_detection import *
+from im_reduction import *
+from stats_profile import *
+
 warnings.filterwarnings("ignore")
 
 #Reducing selected tune and extracting beam profiles
@@ -18,18 +23,27 @@ image.get_profile()
 y = np.arange(image.y_size)
 x = np.arange(image.x_size)
 
-#Apply a smoothing Savitzky-Golay filter to the arrays: applies a polynomial of order 3 for every 5 data points
-y_smooth=savgol_filter(image.profile_y, 5, 3)
-x_smooth=savgol_filter(image.profile_x, 5, 3)
+#it's called x_smooth because that's what I called it in V1.0 or so when I was smoothing it
+x_smooth = image.profile_x#[200:330]
+x_err = image.error_x#[200:330]
+x_ax = x#[200:330]
 
-#instead of fitting with a model, take the median. Comparing to actual peak can give an idea of error.
-x_med, x_sigp, x_sign = findMedian(x_smooth)
-y_med, y_sigp, y_sign = findMedian(y_smooth)
-x_peak, x_peak_idx= x_smooth.max(), list(x_smooth).index(x_smooth.max())
-y_peak, y_peak_idx= y_smooth.max(), list(y_smooth).index(y_smooth.max())
+#clipping the y axis to get rid of noise for now
+y_smooth = image.profile_y#[:220]
+y_err = image.error_y#[:220]
+y_ax = y#[:220]
 
-x_loc, y_loc= (x_med-d1542_center[0]), (d1542_center[1]-y_med) #y-axis is inverted
-beam_location=[x_med, y_med, x_peak_idx, y_peak_idx, x_loc*px_to_mm, y_loc*px_to_mm]
+#Find the mean and sigma of the data
+#should all be in pixels
+x_mean, x_mean_err, x_std, x_std_err, mean_arr_x = profStats(x_smooth, x_err, x_ax)
+y_mean, y_mean_err, y_std, y_std_err, mean_arr_y = profStats(y_smooth, y_err, y_ax)
+
+
+x_loc, y_loc= (x_mean-d1542_center[0]), (d1542_center[1]-y_mean) #y-axis is inverted
+beam_loc=[x_mean, y_mean, x_std, y_std, x_loc*px_to_mm, y_loc*px_to_mm]
+
+#uncomment this to save MC simulation data for mean distribution plotting
+#np.savetxt('im32_data_array_x.txt', mean_arr_x, delimiter=' ') 
 
 #### plot and save results ####
 mpl.style.use('seaborn')
@@ -61,18 +75,38 @@ main_ax.plot( [x_med, x_med], [0, image.shape[0]], linewidth=0.6, color='r')
 main_ax.plot(d1542_dots[0][:], d1542_dots[1][:],  'o', markeredgecolor='red', markerfacecolor='red', markersize=3)
 
 # plot the x and y profiles
-#orange=(200/255,82/255,0/255)
-x_hist.plot(x, image.profile_x)
-x_hist.plot([x_med,x_med],[0, x_peak],  linewidth=0.6, color='r', marker='.', markersize=4, label="Median")
-x_hist.plot([x_peak_idx,x_peak_idx],[0, x_peak],  linewidth=0.6, color='gray', linestyle='-', label="Peak")
+x_hist.plot(x_ax, x_smooth)
+x_hist.plot([x_mean,x_mean],[0, np.max(x_smooth)],
+            linewidth=0.6, color='r', marker='.', markersize=4, label="Mean"
+			)
+x_hist.plot( [0, len(image.profile_x)],[0, 0],
+            linewidth=0.6, color='gray', marker='.', markersize=0
+			)
+x_hist.plot( [x_mean+x_mean_err, x_mean+x_mean_err], [0, np.max(x_smooth)],
+            linewidth=0.45, color='b', marker='.', markersize=4, label=u"\u00B11\u03C3"
+			)
+x_hist.plot( [x_mean-x_mean_err, x_mean-x_mean_err], [0, np.max(x_smooth)],
+           linewidth=0.45, color='b', marker='.', markersize=4
+			)
 x_hist.legend(loc="upper right", prop={'size':8})
 xticks=[i for i in range(image.x_size) if i%20==0]
 x_hist.set_xticks(xticks)
 plt.xticks(rotation=45)
 
-y_hist.plot(image.profile_y, y)
-y_hist.plot([0, y_peak], [y_med, y_med], linewidth=0.6, color='r', marker='.', markersize=4, label="Median")
-y_hist.plot([0, y_peak], [y_peak_idx, y_peak_idx], linewidth=0.6, color='gray',  linestyle='-', label="Peak")
+y_hist.plot(y_smooth, y_ax)
+y_hist.plot([0, np.max(y_smooth)], [y_mean, y_mean], 
+            linewidth=0.6, color='r', marker='.', markersize=4, label="Mean"
+			)
+y_hist.plot([0, 0], [0, len(image.profile_y)], 
+            linewidth=0.6, color='gray', marker='.', markersize=0
+			)
+
+y_hist.plot([0, np.max(y_smooth)], [y_mean+y_mean_err, y_mean+y_mean_err], 
+            linewidth=0.45, color='b', marker='.', markersize=4, label=u"\u00B11\u03C3"
+			)
+y_hist.plot([0, np.max(y_smooth)], [y_mean-y_mean_err, y_mean-y_mean_err], 
+           linewidth=0.45, color='b', marker='.', markersize=4
+			)
 yticks= [i for i in range(image.y_size) if i%20==0]
 y_hist.set_yticks(yticks)
 y_hist.invert_xaxis()
@@ -81,11 +115,29 @@ y_hist.invert_xaxis()
 mkdir_p(output_path)
 
 #save results
+
+#uncommment this to save the different stats for a single run
+#f= open(  output_path + f"data_output_stats_report.txt", "a+")
+#f.write(f'{sys.argv[1][90:-5]} {x_mean} {x_mean_err} {x_std} {y_mean} {y_mean_err} {y_std} {x_mean*px_to_mm} {x_std*px_to_mm} {y_mean*px_to_mm} {y_std*px_to_mm}\n')
+#f.close()
+
 timestring = (datetime.datetime.now()).strftime("%m-%d_%H:%M.%f")
-image_name= sys.argv[1].split("captures/")[1].split(".tiff")[0] #+ timestring
-plt.savefig(f'/user/e18514/Documents/Viewer-Image-Analysis/output/optimizer/{image_name}.png', dpi=300)
-np.savetxt('/user/e18514/Documents/Viewer-Image-Analysis/output/optimizer/BeamLoc_' + image_name + '.csv', [beam_location])
+image_name= sys.argv[1][90:-5] # + '_' + timestring
+plt.savefig(output_path + 'Output' + image_name + '.png', dpi=300)
+
+'''
+np.savetxt(output_path + 'BeamLoc_' + image_name + '.csv',
+          [beam_loc], 
+          header="X-Mean (px), Y-Mean (px), X-Peak (px), Y-Peak (px), X-Location (mm), Y-Location (mm)"
+ )'
+
+
+#timestring = (datetime.datetime.now()).strftime("%m-%d_%H:%M.%f")
+#image_name= sys.argv[1].split("captures/")[1].split(".tiff")[0] #+ timestring
+#plt.savefig(f'/user/e18514/Documents/Viewer-Image-Analysis/output/optimizer/{image_name}.png', dpi=300)
+#np.savetxt('/user/e18514/Documents/Viewer-Image-Analysis/output/optimizer/BeamLoc_' + image_name + '.csv', [beam_location])
 #header="X-Median (px), Y-Median (px), X-Peak (px), Y-Peak (px), X-Location (mm), Y-Location (mm)")
+
 
 if (show_plots== True):
 	plt.show()
