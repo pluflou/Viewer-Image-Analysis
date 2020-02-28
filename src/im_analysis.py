@@ -64,12 +64,27 @@ im=main_ax.imshow(image.subtracted_data,  cmap='cividis')
 
 main_ax.grid(False)
 try:
-	main_ax.set_title("Image: " +sys.argv[1].split('captures/')[1]+ "\nScale: %.1f mm is 1 pixel\nCenter X-pos: %.1f +/- %.1f mm, Center Y-pos: %.1f +/- %.1f mm" %(px_to_mm, beam_location[4], abs(x_peak_idx-x_med)*px_to_mm, beam_location[5], abs(y_peak_idx-y_med)*px_to_mm), fontsize=11)
+	main_ax.set_title(
+		"Image: "+sys.argv[1][90:-5]+
+		"\nCenter X-pos: %.1f +/- %.1f mm, Center Y-pos: %.1f +/- %.1f mm" 
+		%(beam_loc[4], x_std*px_to_mm, beam_loc[5], y_std*px_to_mm),
+		fontsize=11
+		)
 except NameError:
-	main_ax.set_title("Image: " +sys.argv[1].split('captures/')[1]+ "\nScale: Not found\nRaw Center X-pos: %.1f +/- %.1f px, Center Y-pos: %.1f +/- %.1f px" %(abs(x_med), abs(x_peak_idx-x_med), abs(y_med), abs(y_peak_idx-y_med)), fontsize=11)
-	
-main_ax.plot([0, image.shape[1]], [y_med,y_med], linewidth=0.6, color='r')
-main_ax.plot( [x_med, x_med], [0, image.shape[0]], linewidth=0.6, color='r')
+	main_ax.set_title(
+		"Image: "+sys.argv[1][80:-5]+
+		"\nScale: Not found\nRaw Center X-pos: %.1f +/- %.1f px, Center Y-pos: %.1f +/- %.1f px"
+		%(x_mean, x_std, y_mean, y_std),
+		fontsize=11
+		)
+
+main_ax.plot([0, image.shape[1]], [y_mean,y_mean],
+            linewidth=0.6, color='r'
+			)
+
+main_ax.plot( [x_mean, x_mean], [0, image.shape[0]],
+            linewidth=0.6, color='r'
+			)
 
 #Plotting dots. Their location is relative to to selected region of the light_image
 main_ax.plot(d1542_dots[0][:], d1542_dots[1][:],  'o', markeredgecolor='red', markerfacecolor='red', markersize=3)
@@ -117,19 +132,21 @@ mkdir_p(output_path)
 #save results
 
 #uncommment this to save the different stats for a single run
-#f= open(  output_path + f"data_output_stats_report.txt", "a+")
-#f.write(f'{sys.argv[1][90:-5]} {x_mean} {x_mean_err} {x_std} {y_mean} {y_mean_err} {y_std} {x_mean*px_to_mm} {x_std*px_to_mm} {y_mean*px_to_mm} {y_std*px_to_mm}\n')
-#f.close()
+f= open(  output_path + f"data_output_stats_report.txt", "a+")
+f.write(f'{sys.argv[1][80:-5]} {x_mean} {x_mean_err} {x_std} {y_mean} {y_mean_err} {y_std} {x_mean*px_to_mm} {x_std*px_to_mm} {y_mean*px_to_mm} {y_std*px_to_mm}\n')
+f.close()
 
 timestring = (datetime.datetime.now()).strftime("%m-%d_%H:%M.%f")
-image_name= sys.argv[1][90:-5] # + '_' + timestring
+#image_name= sys.argv[1][90:-5] # + '_' + timestring
+image_name= sys.argv[1][80:-5] # + '_' + timestring
 plt.savefig(output_path + 'Output' + image_name + '.png', dpi=300)
 
 '''
 np.savetxt(output_path + 'BeamLoc_' + image_name + '.csv',
           [beam_loc], 
           header="X-Mean (px), Y-Mean (px), X-Peak (px), Y-Peak (px), X-Location (mm), Y-Location (mm)"
- )'
+ )
+ '''
 
 
 #timestring = (datetime.datetime.now()).strftime("%m-%d_%H:%M.%f")
@@ -141,4 +158,3 @@ np.savetxt(output_path + 'BeamLoc_' + image_name + '.csv',
 
 if (show_plots== True):
 	plt.show()
-

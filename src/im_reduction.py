@@ -11,6 +11,7 @@ class Image:
         self.x_size= image.shape[1]
         self.y_size= image.shape[0]
         self.subtracted_data= np.array([[0 for x in range(self.x_size)] for y in range(self.y_size)])
+        self.error= np.array([[0 for x in range(self.x_size)] for y in range(self.y_size)])
         self.profile_x= [0 in range (self.x_size)]
         self.profile_y= [0 in range (self.y_size)]
         self.error_x= [0 in range (self.x_size)]
@@ -30,7 +31,7 @@ class Image:
         else:
             print("Error: Background image size does not match data size.")
     
-     def get_profile(self):
+    def get_profile(self):
         print("Getting y-axis profile...")
         #PROFILE IN Y
         for i in range(self.y_size): #loop over all y
@@ -61,7 +62,7 @@ class Image:
 
         self.offset_x=np.mean(self.profile_x[1:15])
         self.profile_x=self.profile_x[1:]#-self.offset_x
-        self.error_x= self.error_x[1:]offset_x
+        self.error_x= self.error_x[1:]
 
 def findMedian(profile):
     sum_total=sum(profile)

@@ -5,11 +5,13 @@
 from skimage import  io
 import sys, os, errno
 
-path_to_images= '/mnt/daqtesting/secar_camera/new_captures/'
-path_to_code=  '/user/e18514/Documents/Viewer-Image-Analysis/'
-dir_date= 'optimizer/'
+#path_to_images= '/mnt/daqtesting/secar_camera/new_captures/'
+#path_to_code=  '/user/e18514/Documents/Viewer-Image-Analysis/'
+path_to_images= '/home/sara/Documents/SECAR/Diagnostics/Viewer-Image-Analysis/images/dipole_scan/'
+path_to_code=  '/home/sara/Documents/SECAR/Diagnostics/Viewer-Image-Analysis/src'
+dir_date= 'dipole_scan_results/'
 viewer_loc= 'D1542'
-output_path= path_to_code+'output/'+dir_date
+output_path= '/home/sara/Documents/SECAR/Diagnostics/Viewer-Image-Analysis/output/'+dir_date
 
 show_plots= False
 		
@@ -21,11 +23,11 @@ show_plots= False
 raw_image= io.imread(sys.argv[1])
 
 #Enter here path and name of the background image (make sure it is the SAME SIZE as the tune image)
-bg= io.imread(path_to_images + 'D1542_9_12_dipole_scan_bg_001.tiff')
+bg= io.imread(path_to_images + '/light_bg/D1542_9_12_dipole_scan_bg2_145.tiff')
 
 ###### Finding the real center (dots) of the viewer ######
 #Path to updated/compatible image of the viewer with light on. 
-light_image= io.imread(path_to_images+'D1542_9_12_dipole_scan_lighton_001.tiff')
+light_image= io.imread(path_to_images+'/light_bg/D1542_9_12_dipole_scan_lighton_001.tiff')
 
 #Define here middle region of viewer in pixels. It helps to look at the image first and then refine the region after seeing matches.
 
@@ -45,7 +47,7 @@ x_max= 550
 d1542_center= [207, 177] #updated 9/16/2019
 
 #Enter here path and name of the image of the viewer dots you wish to use as a template
-dotim= '/user/e18514/Documents/Viewer-Image-Analysis/tiff_files/dots/dot3.tiff'
+dotim= '/home/sara/Documents/SECAR/Diagnostics/Viewer-Image-Analysis/tiff_files/dots/dot3.tiff'
 template= io.imread(dotim) 
 
 #Enter here the threshold (minimum intensity of peaks) to detect dots on image
