@@ -79,7 +79,7 @@ px_to_mm= 5/scale
 d1542_dots=[[d1542_center[0],d1542_center[0],d1542_center[0], d1542_center[0]+ scale, 
             d1542_center[0]- scale],
 [d1542_center[1]+scale,d1542_center[1]-scale,d1542_center[1],d1542_center[1],d1542_center[1]]]
-	    
+'''
 #Show the image, template and dots detected        
 fig = plt.figure(figsize=(5, 5))
 ax1 = plt.subplot(1, 3, 1)
@@ -104,3 +104,4 @@ ax3.autoscale(False)
 ax3.plot(peaks[:,1], peaks[:,0], 'o', markeredgecolor='r', markerfacecolor='none', markersize=10)
 for row in peaks:
     ax3.text(row[1],row[0],(x_min+row[1],y_min+row[0]))
+'''

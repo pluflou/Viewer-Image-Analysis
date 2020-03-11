@@ -2,6 +2,7 @@ import sys
 import warnings
 
 import numpy as np
+from scipy import ndimage
 warnings.filterwarnings("ignore")
 
 class Image:    
@@ -12,13 +13,15 @@ class Image:
         self.y_size= image.shape[0]
         self.subtracted_data= np.array([[0 for x in range(self.x_size)] for y in range(self.y_size)])
         self.error= np.array([[0 for x in range(self.x_size)] for y in range(self.y_size)])
+
         self.profile_x= [0 in range (self.x_size)]
         self.profile_y= [0 in range (self.y_size)]
         self.error_x= [0 in range (self.x_size)]
         self.error_y= [0 in range (self.y_size)]
         self.offset_x= 0 
-        self.offset_y= 0
-      
+        self.offset_y= 0    
+
+
     def subtract_bg(self,bg):
         print("Subtracting background...")
         if (bg.shape == self.shape): 
@@ -27,11 +30,14 @@ class Image:
                     #if ((self.raw[i][j]>bg[i][j]).all() and (bg[i][j]>=0).all() and (self.raw[i][j]>=0).all()):
                     self.subtracted_data[i][j]= int(self.raw[i][j])-int(bg[i][j])
                     self.error[i][j] = np.sqrt(np.abs(int(self.raw[i][j])) + np.abs(int(bg[i][j])))
+            self.subtracted_data = ndimage.median_filter(self.subtracted_data, 10)
+            
             return self.subtracted_data
         else:
             print("Error: Background image size does not match data size.")
-    
+
     def get_profile(self):
+	
         print("Getting y-axis profile...")
         #PROFILE IN Y
         for i in range(self.y_size): #loop over all y
@@ -45,7 +51,7 @@ class Image:
             self.error_y.append(np.sqrt(err))
 
         self.offset_y= np.mean(self.profile_y[1:15])
-        self.profile_y=self.profile_y[1:]#- self.offset_y  
+        self.profile_y=self.profile_y[1:]- self.offset_y  
         self.error_y = self.error_y[1:]
     
      
@@ -61,27 +67,27 @@ class Image:
             self.error_x.append(np.sqrt(err))
 
         self.offset_x=np.mean(self.profile_x[1:15])
-        self.profile_x=self.profile_x[1:]#-self.offset_x
+        self.profile_x=self.profile_x[1:]-self.offset_x
         self.error_x= self.error_x[1:]
 
 def findMedian(profile):
+    ''' returs the median of the integrated profile '''
+    profile_new = []
+    for c in profile:
+        if c <0 :
+            profile_new.append(0)
+        else:
+            profile_new.append(c) 
+    profile = profile_new
     sum_total=sum(profile)
     median=0
-    sigp=0
-    sign=0
+
     for i in range(len(profile)):
         sumInt=sum(profile[0:i])
         frac=sumInt/sum_total
-        if (frac>0.15 and frac<0.17):
-            sign=i
-        elif (frac>0.48 and frac<0.52):
-            median=i
-        elif (frac>0.45 and frac<0.54):
-            median=i
-        elif (frac>0.41 and frac<0.58):
-            median=i
-        elif (frac>0.83 and frac<0.85):
-            sigp=i
+        if (frac>=0.5):
+            median= (2*i-1)/2
+            break
     if (median==0):
-        print("Error when finding median. Check im_reduction ln 62.")
-    return  median, sigp, sign
+        print("Error when finding median. Check im_reduction ln 68.")
+    return  median	
