@@ -47,7 +47,7 @@ x_mean, x_mean_err, x_std, x_std_err, mean_arr_x = profStats(x_smooth, x_err, x_
 y_mean, y_mean_err, y_std, y_std_err, mean_arr_y = profStats(y_smooth, y_err, y_ax)
 
 
-x_loc, y_loc= (x_mean-d1542_center[0]), (d1542_center[1]-y_mean) #y-axis is inverted
+x_loc, y_loc= (x_mean-viewer_center[0]), (viewer_center[1]-y_mean) #y-axis is inverted
 beam_loc=[x_mean, y_mean, x_std, y_std, x_loc*px_to_mm, y_loc*px_to_mm, x_mean_err, y_mean_err]
 
 #uncomment this to save MC simulation data for mean distribution plotting
@@ -61,8 +61,8 @@ beam_loc=[x_mean, y_mean, x_std, y_std, x_loc*px_to_mm, y_loc*px_to_mm, x_mean_e
 #'''
 
 #the mean is actually a median in this case
-x_mean = findMedian(x_smooth)
-y_mean = findMedian(y_smooth)
+x_mean, x_nsig, x_psig = findMedian(x_smooth)
+y_mean, y_nsig, y_psig = findMedian(y_smooth) #do not actually need the width in y 
 
 #print("Test digits {0:.4f} {1:.4f}".format(x_mean, y_mean))
 
@@ -70,12 +70,13 @@ x_peak, x_idx= np.max(x_smooth), list(x_smooth).index(np.max(x_smooth))
 y_peak, y_idx= np.max(y_smooth), list(y_smooth).index(np.max(y_smooth))
 
 
-x_loc, y_loc= (x_mean-d1542_center[0]), (d1542_center[1]-y_mean) #y-axis is inverted
+x_loc, y_loc= (x_mean-viewer_center[0]), (viewer_center[1]-y_mean) #y-axis is inverted
 
-#print("Center location", d1542_center[0], d1542_center[1], "xsize", image.x_size, "ysize", image.y_size)
+#print("Center location", viewer_center[0], viewer_center[1], "xsize", image.x_size, "ysize", image.y_size)
 
 #taking x and y in pixels, indices 0 and 1
-beam_loc=[x_mean, y_mean, x_idx, y_idx, x_loc, y_loc, x_peak, y_peak]
+beam_loc=[x_mean, y_mean, x_idx, y_idx, x_loc, y_loc, x_peak, y_peak, x_nsig, x_psig]
+
 #'''
 #############################################################################################################
 
@@ -104,13 +105,13 @@ main_ax.grid(False)
 #try:
 #main_ax.set_title("Image: " +sys.argv[1].split('captures/')[1]+ "\nScale: %.1f mm is 1 pixel\nCenter X-pos: %.1f +/- %.1f mm, Center Y-pos: %.1f +/- %.1f mm" %(px_to_mm, beam_loc[4], abs(x_idx-x_mean)*px_to_mm, beam_loc[5], abs(y_idx-y_mean)*px_to_mm), fontsize=11)
 #except NameError:
-main_ax.set_title("Image: " +sys.argv[1].split('captures/')[1]+ "\nScale: Not found\nRaw Center X-pos: %.1f +/- %.1f px, Center Y-pos: %.1f +/- %.1f px" %(x_mean, abs(x_idx-x_mean), y_mean, abs(y_idx-y_mean)), fontsize=11)
+main_ax.set_title("Image: " +sys.argv[1].split('captures/')[1]+ "\nRaw Center X-pos: %.1f +/- %.1f px, Center Y-pos: %.1f +/- %.1f px \n With X-dir: %.1f px" %(x_mean, abs(x_idx-x_mean), y_mean, abs(y_idx-y_mean), x_psig-x_nsig), fontsize=11)
 	
 main_ax.plot([0, image.shape[1]], [y_mean,y_mean], linewidth=0.6, color='r')
 main_ax.plot( [x_mean, x_mean], [0, image.shape[0]], linewidth=0.6, color='r')
 
 #Plotting dots. Their location is relative to to selected region of the light_image
-main_ax.plot(d1542_dots[0][:], d1542_dots[1][:],  'o', markeredgecolor='red', markerfacecolor='red', markersize=3)
+main_ax.plot(viewer_dots[0][:], viewer_dots[1][:],  'o', markeredgecolor='red', markerfacecolor='red', markersize=3)
 
 # plot the x and y profiles
 x_hist.plot(x_ax, x_smooth)
@@ -120,12 +121,12 @@ x_hist.plot([x_mean,x_mean],[0, np.max(x_smooth)],
 x_hist.plot( [0, len(image.profile_x)],[0, 0],
             linewidth=0.6, color='gray', marker='.', markersize=0
 			)
-#x_hist.plot( [x_mean+x_mean_err, x_mean+x_mean_err], [0, np.max(x_smooth)],
- #           linewidth=0.45, color='b', marker='.', markersize=4, label=u"\u00B11\u03C3"
-	#		)
-#x_hist.plot( [x_mean-x_mean_err, x_mean-x_mean_err], [0, np.max(x_smooth)],
- #          linewidth=0.45, color='b', marker='.', markersize=4
-#			)
+x_hist.plot( [x_nsig, x_nsig], [0, np.max(x_smooth)],
+            linewidth=0.45, color='b', marker='.', markersize=4, label=u"\u00B11\u03C3"
+			)
+x_hist.plot( [x_psig, x_psig], [0, np.max(x_smooth)],
+           linewidth=0.45, color='b', marker='.', markersize=4
+			)
 x_hist.legend(loc="upper right", prop={'size':8})
 xticks=[i for i in range(image.x_size) if i%20==0]
 x_hist.set_xticks(xticks)
@@ -164,7 +165,7 @@ image_name= sys.argv[1].split("captures/")[1].split(".tiff")[0] #+ timestring
 #this is the text file the optimizer looks for to calculate the distance
 np.savetxt(output_path + 'BeamLoc_' + image_name + '.csv',
           [beam_loc] )
-          #header="X-Mean (px), Y-Mean (px), X-Peak (px), Y-Peak (px), X-Location (mm), Y-Location (mm), errorx (px), errory (px)"
+          #header="X-Mean (px), Y-Mean (px), X-Peak (px), Y-Peak (px), X-Location (mm), Y-Location (mm), errorx/nsig (px), errory/psig (px)"
 
 
 #timestring = (datetime.datetime.now()).strftime("%m-%d_%H:%M.%f")

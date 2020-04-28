@@ -80,14 +80,26 @@ def findMedian(profile):
             profile_new.append(c) 
     profile = profile_new
     sum_total=sum(profile)
-    median=0
+    median = 0
+    psigma = 0
+    nsigma = 0
 
     for i in range(len(profile)):
+
         sumInt=sum(profile[0:i])
         frac=sumInt/sum_total
+
+        if (frac>=0.3413):
+            nsigma = i
+            continue
         if (frac>=0.5):
             median= (2*i-1)/2
+            continue
+        if (frac>0.8413):
+            psigma = i-1
             break
+
     if (median==0):
-        print("Error when finding median. Check im_reduction ln 68.")
-    return  median	
+        print("Error when finding median. Check im_reduction ln 73.")
+
+    return  median, nsigma, psigma

@@ -76,9 +76,9 @@ else:
 px_to_mm= 5/scale
 
 #recreating the correct dots on viewer to plot
-d1542_dots=[[d1542_center[0],d1542_center[0],d1542_center[0], d1542_center[0]+ scale, 
-            d1542_center[0]- scale],
-[d1542_center[1]+scale,d1542_center[1]-scale,d1542_center[1],d1542_center[1],d1542_center[1]]]
+viewer_dots=[[viewer_center[0],viewer_center[0],viewer_center[0], viewer_center[0]+ scale, 
+            viewer_center[0]- scale],
+[viewer_center[1]+scale,viewer_center[1]-scale,viewer_center[1],viewer_center[1],viewer_center[1]]]
 '''
 #Show the image, template and dots detected        
 fig = plt.figure(figsize=(5, 5))
