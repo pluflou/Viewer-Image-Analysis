@@ -16,7 +16,7 @@ from stats_profile import *
 
 warnings.filterwarnings("ignore")
 
-show_plots = False
+show_plots = True
 
 #Reducing selected tune and extracting beam profiles
 image =Image(raw_image)
@@ -105,7 +105,8 @@ main_ax.grid(False)
 #try:
 #main_ax.set_title("Image: " +sys.argv[1].split('captures/')[1]+ "\nScale: %.1f mm is 1 pixel\nCenter X-pos: %.1f +/- %.1f mm, Center Y-pos: %.1f +/- %.1f mm" %(px_to_mm, beam_loc[4], abs(x_idx-x_mean)*px_to_mm, beam_loc[5], abs(y_idx-y_mean)*px_to_mm), fontsize=11)
 #except NameError:
-main_ax.set_title("Image: " +sys.argv[1].split('captures/')[1]+ "\nRaw Center X-pos: %.1f +/- %.1f px, Center Y-pos: %.1f +/- %.1f px \n With X-dir: %.1f px" %(x_mean, abs(x_idx-x_mean), y_mean, abs(y_idx-y_mean), x_psig-x_nsig), fontsize=11)
+
+main_ax.set_title("Image: " +sys.argv[1].split('2020/')[1]+ "\nRaw Center X-pos: %.1f +/- %.1f px, Center Y-pos: %.1f +/- %.1f px \n With X-dir: %.1f px" %(x_mean, abs(x_idx-x_mean), y_mean, abs(y_idx-y_mean), x_psig-x_nsig), fontsize=11)
 	
 main_ax.plot([0, image.shape[1]], [y_mean,y_mean], linewidth=0.6, color='r')
 main_ax.plot( [x_mean, x_mean], [0, image.shape[0]], linewidth=0.6, color='r')
@@ -160,7 +161,7 @@ mkdir_p(output_path)
 #f.write(f'{sys.argv[1][90:-5]} {x_mean} {x_mean_err} {x_std} {y_mean} {y_mean_err} {y_std} {x_mean*px_to_mm} {x_std*px_to_mm} {y_mean*px_to_mm} {y_std*px_to_mm}\n')
 #f.close()
 
-image_name= sys.argv[1].split("captures/")[1].split(".tiff")[0] #+ timestring
+image_name= sys.argv[1].split("2020/")[1].split(".tiff")[0] #+ timestring
 
 #this is the text file the optimizer looks for to calculate the distance
 np.savetxt(output_path + 'BeamLoc_' + image_name + '.csv',
@@ -169,7 +170,7 @@ np.savetxt(output_path + 'BeamLoc_' + image_name + '.csv',
 
 
 #timestring = (datetime.datetime.now()).strftime("%m-%d_%H:%M.%f")
-plt.savefig(f'/user/e18514/Documents/viewer-image-analysis/output/optimizer/{image_name}.png', dpi=300)
+#plt.savefig(f'/user/e18514/Documents/viewer-image-analysis/output/optimizer/{image_name}.png', dpi=300)
 
 
 #np.savetxt('/user/e18514/Documents/Viewer-Image-Analysis/output/optimizer/BeamLoc_' + image_name + '.csv', [beam_location])

@@ -8,7 +8,7 @@ import warnings
 warnings.filterwarnings("ignore")
 
 #Define the center region that surrounds the 5 center dots
-light_image_region=light_image[y_min:y_max,x_min:x_max]
+light_image_region= light_image[y_min:y_max, x_min:x_max]
 
 #Find matched of the dot template selected
 result = match_template(light_image_region, template, pad_input=True) 
@@ -61,7 +61,7 @@ if (len(dy)!=0 and len(dx)!=0):
     if (scale_x<= scale_y):
         scale= scale_x
         print("Adopted scale is ",scale," pixels for 5 mm.")
-    elif (scale_y<= scale_x):
+    elif (scale_y <= scale_x):
         scale= scale_y
         print("Adopted scale is ",scale," pixels for 5 mm.")
 elif (len(dy)!=0 and len(dx)==0):
@@ -72,6 +72,13 @@ else:
     scale = 1
     print("No scale was found.")
 
+if (viewer_loc == "D1879"):
+	print("Scale manually set to 41 pixels for 5 mm, +/- 4 pixels.")
+	scale = 41
+elif (viewer_loc == "D1836"):
+	print("Scale manually set to 52 pixels for 5 mm, +/- 1 pixel.")
+	scale = 52
+
 #setting conversion
 px_to_mm= 5/scale
 
@@ -79,7 +86,10 @@ px_to_mm= 5/scale
 viewer_dots=[[viewer_center[0],viewer_center[0],viewer_center[0], viewer_center[0]+ scale, 
             viewer_center[0]- scale],
 [viewer_center[1]+scale,viewer_center[1]-scale,viewer_center[1],viewer_center[1],viewer_center[1]]]
-'''
+#'''
+
+
+
 #Show the image, template and dots detected        
 fig = plt.figure(figsize=(5, 5))
 ax1 = plt.subplot(1, 3, 1)
@@ -104,4 +114,4 @@ ax3.autoscale(False)
 ax3.plot(peaks[:,1], peaks[:,0], 'o', markeredgecolor='r', markerfacecolor='none', markersize=10)
 for row in peaks:
     ax3.text(row[1],row[0],(x_min+row[1],y_min+row[0]))
-'''
+#'''
