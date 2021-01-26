@@ -17,20 +17,21 @@ viewer_loc= (sys.argv[2]).capitalize() # i.e. 'D1542'
 #Enter here path and name of the background image (make sure it is the SAME SIZE as the tune image)
 """#### Defining settings for each viewer ###"""
 
-bg_im = { 	'D1542': 'D1542_bg_4_4_2020_000.tiff',
-			'D1638': 'D1638_bg_4_4_2020_000.tiff',
-			'D1688': 'D1688_bg_4_4_2020_000.tiff',
-			'D1783': 'D1783_bg_4_4_2020_000.tiff',
-			'D1836': 'D1836_bg_4_4_2020_000.tiff',
-			'D1879': 'D1879_bg_4_4_2020_000.tiff'
+bg_im = { 'D1542': 'D1542_BG_07-27_23:12_000.tiff',
+		'D1638': 'D1638_bg_7_28_2020_000.tiff',
+#		'D1638': 'D1638_bg_pleasework_000.tiff',
+		'D1688': 'D1688_bg_7_28_2020_000.tiff',
+		'D1783': 'D1783_bg_07_30_3_19_000.tiff',
+		'D1836': 'D1836_bg_7_29_12_44_000.tiff',
+		'D1879': 'D1879_BG_07-30_00:59_000.tiff'
 		}
 
 lt_im = { 	'D1542': 'D1542_light_4_4_2020_000.tiff',
-			'D1638': 'D1638_light_4_4_2020_000.tiff',
-			'D1688': 'D1688_light_4_4_2020_000.tiff',
-			'D1783': 'D1783_light_4_4_2020_000.tiff',
-			'D1836': 'D1836_light_4_4_2020_000.tiff',
-			'D1879': 'D1879_light_4_4_2020_000.tiff'
+		'D1638': 'D1638_light_4_4_2020_000.tiff',
+		'D1688': 'D1688_light_4_4_2020_000.tiff',
+		'D1783': 'D1783_light_4_4_2020_000.tiff',
+		'D1836': 'D1836_light_4_4_2020_000.tiff',
+		'D1879': 'D1879_light_4_4_2020_000.tiff'
 		}
 
 ###### Finding the real center (dots) of the viewer ######
@@ -55,14 +56,14 @@ cen = { 'D1542': [83, 76], #all updated 6/12/2020
 		'D1783': [622, 380],
 		'D1836': [696, 311],
 		'D1879': [285, 294]
-	  }	  
+	  }	
 
 #############################################
 """#### ################################# ###"""
 #############################################
 
-bg = io.imread(path_to_images + bg_im[viewer_loc])
-light_image= io.imread(path_to_images+ lt_im[viewer_loc])
+bg = io.imread('/home/sara/Documents/SECAR/commissioning/tuning_results/cs_ne_june2020_tuning/133cs_quad_elog_270/' + bg_im[viewer_loc])
+light_image= io.imread('/home/sara/Documents/SECAR/commissioning/tuning_results/cs_ne_june2020_tuning/133cs_quad_elog_270/' + lt_im[viewer_loc])
 
 #bg = io.imread('/home/sara/Documents/SECAR/Diagnostics/Viewer-Image-Analysis/images/D1542_2_22_17_34_bg_053.tiff')
 #light_image = io.imread('/home/sara/Documents/SECAR/Diagnostics/Viewer-Image-Analysis/images/Light_on_D1542_20190211_final_002.tiff')

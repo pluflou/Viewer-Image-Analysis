@@ -1,9 +1,7 @@
 import sys
-import warnings
 
 import numpy as np
 from scipy import ndimage
-warnings.filterwarnings("ignore")
 
 class Image:    
     def __init__(self, image):
@@ -70,9 +68,16 @@ class Image:
         self.profile_x=self.profile_x[1:]-self.offset_x
         self.error_x= self.error_x[1:]
 
-def findMedian(profile):
+def find_median(profile):
     ''' returs the median of the integrated profile '''
     profile_new = []
+
+    #min_peak_loc = np.argmin(profile)
+    #max_peak_loc = np.argmax(profile)
+
+    #offset = np.average(profile[min_peak_loc: min_peak_loc +20])
+    #profile = profile - offset 
+
     for c in profile:
         if c <0 :
             profile_new.append(0)
@@ -88,18 +93,29 @@ def findMedian(profile):
 
         sumInt=sum(profile[0:i])
         frac=sumInt/sum_total
+       
 
-        if (frac>=0.3413):
-            nsigma = i
-            continue
+        if (frac>=0.158):
+            if (nsigma == 0):
+                nsigma = i
+                continue
         if (frac>=0.5):
-            median= (2*i-1)/2
-            continue
-        if (frac>0.8413):
-            psigma = i-1
-            break
+            if (median == 0 ):
+                median= (2*i-1)/2
+                continue
+        if (frac>0.842):
+            if (psigma == 0):
+                psigma = i-1
+                break
 
     if (median==0):
-        print("Error when finding median. Check im_reduction ln 73.")
+        print("Error when finding median. Beam not found, or check im_reduction.py.")
 
     return  median, nsigma, psigma
+
+def viewer_dots_loc(viewer_center, scale):
+    ''' returns the location of the 5 dots on a viewer with respect to its center in pixels'''
+    viewer_dots = [[viewer_center[0],viewer_center[0],viewer_center[0], \
+viewer_center[0] + scale,viewer_center[0]- scale], [viewer_center[1]+  \
+scale,viewer_center[1]-scale,viewer_center[1],viewer_center[1],viewer_center[1]]]
+    return viewer_dots

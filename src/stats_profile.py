@@ -1,8 +1,8 @@
 import numpy as np
-import pandas as pd
+#import pandas as pd
 
 #given a profile 
-def profStats(prof, prof_err, xx):
+def profile_stats(prof, prof_err, xx):
     
     #run MC sim to sample a distribution of mean and std
     print("Calculating profile statistics...")
@@ -44,7 +44,7 @@ def profStats(prof, prof_err, xx):
     return avg_mean, std_mean, avg_std, std_std, pr_mean
 
 
-def findMean(xx, prof):
+def find_mean(xx, prof):
     avg_x = []
     norm = []
 
@@ -56,7 +56,7 @@ def findMean(xx, prof):
     avg = avg_x/norm
     return avg
 
-def findSTD(xx, prof, avg):
+def find_std(xx, prof, avg):
     #prof = prof[int(avg-100):int(avg+100)]
     #xx = xx[int(avg-100):int(avg+100)]
 
