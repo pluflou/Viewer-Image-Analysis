@@ -1,14 +1,14 @@
 ## Viewer image analysis for SECAR program 
 ### Example outputs:
- ![viewer_example](output/march_beam.gif)
+ ![viewer_example](output/march_beam.gif){:height="50%" width="50%"}
  
- ![viewer_example2](output/cs_nominal.gif)
+ ![viewer_example2](output/cs_nominal.gif){:height="50%" width="50%"}
 
 ### Packages needed:
-matplotlib==2.2.4
-numpy==1.16.5
-scipy==1.2.2
-skimage==0.17.2 
+matplotlib==2.2.4  
+numpy==1.16.5  
+scipy==1.2.2  
+skimage==0.17.2  
 
 ### How to run:
 1. *ssh -X secaruser@machine or e18514@machine* 
