@@ -1,9 +1,9 @@
 ## Viewer image analysis for SECAR program 
 ### Example outputs:
- ![viewer_example](output/march_beam.gif){:height="50%" width="50%"}
- 
- ![viewer_example2](output/cs_nominal.gif){:height="50%" width="50%"}
 
+<img src="output/march_beam.gif" width="400" >
+ ![viewer_example2](output/cs_nominal.gif)
+ 
 ### Packages needed:
 matplotlib==2.2.4  
 numpy==1.16.5  
