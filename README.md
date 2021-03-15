@@ -1,8 +1,7 @@
 ## Viewer image analysis for SECAR program 
 ### Example outputs:
 
-<img src="output/march_beam.gif" width="400" >
- ![viewer_example2](output/cs_nominal.gif)
+<img src="output/march_beam.gif" width="400" > <img src="output/cs_nominal.gif" width="400" >
  
 ### Packages needed:
 matplotlib==2.2.4  
