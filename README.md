@@ -1,8 +1,8 @@
 ## Viewer image analysis for SECAR program 
 ### Example outputs:
- ![viewer_example](output/march_beam.gif =300)
+ ![viewer_example](output/march_beam.gif)
  
- ![viewer_example2](output/cs_nominal.gif =300)
+ ![viewer_example2](output/cs_nominal.gif)
 
 ### Packages needed:
 matplotlib==2.2.4
